@@ -198,7 +198,7 @@ export const advantages = {
   ],
 };
 
-// 24 города с представителями; ссылки — на страницы представителей со старого сайта
+// Все города с представителями со старого сайта (в макете было 24); ссылки — на страницы представителей
 export const cities = {
   title: "Выберите город",
   lead: "Представитель подскажет цены, наличие и условия получения.",
@@ -209,7 +209,9 @@ export const cities = {
     ["Бавлы", "https://www.instagram.com/alina_boginia/"],
     ["Бугульма", "https://instagram.com/vitgrass_bugulma"],
     ["Димитровград", "https://instagram.com/vitgrass_dimitrovgrad"],
+    ["Джалиль", "https://instagram.com/vitgrass.jalil"],
     ["Елабуга", "https://www.instagram.com/vitgrass_elb/"],
+    ["Елабуга 2", "https://www.instagram.com/fitness_leisan"],
     ["Екатеринбург", "https://instagram.com/vitgrass_ekb"],
     ["Заинск", "https://instagram.com/vitgrass_zainsk"],
     ["Казань", "https://instagram.com/vitgrass_kzn"],
@@ -226,7 +228,10 @@ export const cities = {
     ["Самара", "https://instagram.com/vitgrass_samara"],
     ["Санкт-Петербург", "https://instagram.com/greenliverussia"],
     ["Сарманово", "https://instagram.com/vitgrass_sarmanovo"],
+    ["Тольятти", "https://instagram.com/vitgrass_togliatti"],
     ["Туймазы", "https://www.instagram.com/vitgrass_tmz/"],
+    ["Ульяновск", "https://instagram.com/vitgrass_ulyanovsk"],
+    ["Ульяновск 2", "https://vk.ru/biomir_ul"],
     ["Уфа", "https://www.instagram.com/ufa_vitgrass/"],
   ] as [string, string][],
   partner: "Хотите стать представителем сока Витграсс в своём городе?",

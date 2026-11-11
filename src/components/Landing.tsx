@@ -541,7 +541,8 @@ function Cities() {
     setQ("");
     input.current?.focus();
   };
-  const cols = [0, 1, 2].map((c) => cities.items.slice(c * 8, c * 8 + 8));
+  const per = Math.ceil(cities.items.length / 3);
+  const cols = [0, 1, 2].map((c) => cities.items.slice(c * per, c * per + per));
 
   return (
     <section className={s.cities} id="cities">
