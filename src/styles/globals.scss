@@ -1,0 +1,94 @@
+@use "core" as *;
+
+:root {
+  // масштаб: ДВ от 1440 (потолок — чтобы на больших мониторах не раздувалось),
+  // МВ от колонки 358 с полями 16; на планшете колонка перестаёт расти
+  --u: min(calc(100vw / 1440), 1.3333px);
+  @include mobile {
+    --u: min(calc((100vw - 32px) / 358), 1.6px);
+  }
+
+  // ---- Палитра из макета (переменные vitgrass-color-*) ----
+  --bg: #f3f3f3;
+  --card: #fefefe;
+  --heading: #294638;
+  --body: #58665b;
+  --muted: #708075;
+  --green: #497b02;
+  --green-light: #83c723;
+  --yellow: #f6e200;
+  --btn-ink: #2b4a38;
+  --soft: #e5ebdd;
+  --star: #f3c324;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip; // сердце из ростков на МВ выглядывает за край экрана
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(80 * var(--u));
+  @include mobile { scroll-padding-top: calc(72 * var(--u)); }
+}
+body {
+  background: var(--bg);
+  color: var(--heading);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: u(16);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+input {
+  font: inherit;
+  color: inherit;
+}
+ul,
+ol {
+  list-style: none;
+}
+
+// появление блоков при прокрутке — один раз; без JS контент виден
+.motion-ready [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(calc(24 * var(--u)));
+}
+[data-reveal] {
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.8s var(--ease);
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    transition: none;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,145 @@
+// Ядро стилей Витграсс: масштаб, сетка, шкала текста, кнопки и «капля» наведения из UI-кита.
+// Подключается в модулях: @use "styles/core" as *;
+
+// Макет ДВ — 1440, контент 1280 (поля 80). МВ — 390, колонка 358 (поля 16).
+@function u($n) {
+  @return calc(#{$n} * var(--u));
+}
+
+$content: 1280;
+$m-content: 358;
+
+@mixin mobile { @media (max-width: 1023px) { @content; } }
+@mixin desktop { @media (min-width: 1024px) { @content; } }
+@mixin hover { @media (hover: hover) { &:hover { @content; } } }
+
+@mixin container {
+  width: u($content);
+  margin-inline: auto;
+  @include mobile { width: u($m-content); }
+}
+
+// Вертикальный ритм секций: сверху и снизу одинаково
+@mixin section {
+  padding-block: u(72);
+  @include mobile { padding-block: u(40); }
+}
+
+// ---- Шкала текста (стили макета V/h1, V/h2, V/ExtraBolt, V/MediumBolt) ----
+@mixin display { font-family: var(--font-display), system-ui, sans-serif; font-weight: 700; }
+@mixin type-h1 {
+  @include display;
+  font-size: u(56);
+  line-height: 1.2;
+  @include mobile { font-size: u(32); line-height: u(40); }
+}
+@mixin type-h2 {
+  @include display;
+  font-size: u(48);
+  line-height: 1.2;
+  color: var(--heading);
+  @include mobile { font-size: u(28); line-height: u(34); }
+}
+@mixin type-card {
+  font-weight: 700;
+  font-size: u(22);
+  line-height: u(34);
+  color: var(--heading);
+  @include mobile { font-size: u(20); line-height: u(28); }
+}
+@mixin type-item {
+  font-weight: 600;
+  font-size: u(18);
+  line-height: 1.3;
+  color: var(--heading);
+  @include mobile { font-size: u(16); }
+}
+@mixin type-lead {
+  font-weight: 500;
+  font-size: u(18);
+  line-height: 1.4;
+  color: var(--body);
+  @include mobile { font-size: u(16); line-height: u(24); }
+}
+@mixin type-body {
+  font-size: u(17);
+  line-height: u(25);
+  color: var(--body);
+  @include mobile { font-size: u(16); line-height: u(24); }
+}
+
+// ---- «Капля» наведения ----
+// Из UI-кита: слева за краем спрятана капля 10px; при наведении она выезжает кругом,
+// при нажатии разливается на всю ширину. Текст всегда поверх.
+@mixin drop($color, $hover-w: 69, $left: 0) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: u(-10);
+    width: u(10);
+    height: 100%;
+    min-height: u(60);
+    border-radius: u(100);
+    background: $color;
+    transform: translateY(-50%);
+    transition: left 0.45s var(--ease), width 0.45s var(--ease);
+  }
+  @include hover {
+    &::before { left: u($left); width: u($hover-w); }
+  }
+  &:active::before { left: 0; width: 100%; }
+}
+
+// ---- Кнопки ----
+@mixin btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: u(60);
+  padding-inline: u(16);
+  border-radius: u(100);
+  font-family: var(--font-btn), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: u(16);
+  line-height: u(32);
+  white-space: nowrap;
+  transition: color 0.3s, transform 0.2s var(--ease);
+  &:focus-visible { outline: u(2) solid var(--green); outline-offset: u(3); }
+  @include mobile { height: u(48); line-height: u(24); }
+}
+// зелёная, капля жёлтая; нажата — вся жёлтая с тёмным текстом
+@mixin btn-primary {
+  @include btn-base;
+  @include drop(var(--yellow));
+  background: var(--green);
+  color: var(--card);
+  &:active { color: var(--heading); }
+}
+// жёлтая, капля салатовая; нажата — вся зелёная с белым текстом
+@mixin btn-secondary {
+  @include btn-base;
+  @include drop(var(--green-light));
+  background: var(--yellow);
+  color: var(--btn-ink);
+  &:active::before { background: var(--green); }
+  &:active { color: var(--card); }
+}
+// прозрачная с белой рамкой, капля — затемнение
+@mixin btn-outline {
+  @include btn-base;
+  @include drop(rgba(0, 0, 0, 0.24), 68);
+  border: u(1) solid var(--card);
+  color: var(--card);
+}
+
+// Белая карточка
+@mixin card($r: 24, $p: 24) {
+  background: var(--card);
+  border-radius: u($r);
+  padding: u($p);
+}
