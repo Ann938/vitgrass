@@ -85,12 +85,12 @@
 .heroMedia {
   position: absolute;
   inset: 0;
-  // мягкое затемнение снизу-слева — текст читается на любом кадре видео
+  // затемнение из макета: чёрный 48%
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(20deg, rgba(10, 20, 8, 0.45) 0%, rgba(10, 20, 8, 0.12) 50%, transparent 75%);
+    background: rgba(0, 0, 0, 0.48);
   }
 }
 .heroSlide {
@@ -133,7 +133,6 @@
 }
 .heroText {
   grid-area: 1 / 1;
-  text-shadow: 0 u(2) u(24) rgba(10, 20, 8, 0.35);
   display: flex;
   flex-direction: column;
   gap: u(8);
@@ -405,6 +404,20 @@
   align-items: center;
   gap: u(16);
   img { width: u(104); height: u(104); border-radius: 50%; object-fit: cover; flex: none; }
+}
+// аватар без фото — первая буква имени
+.initial {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: u(104);
+  height: u(104);
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--green);
+  @include display;
+  font-size: u(40);
+  @include mobile { width: u(80); height: u(80); font-size: u(32); }
 }
 .stars {
   display: flex;
@@ -735,9 +748,6 @@
 
   .hero {
     height: u(647);
-  }
-  .heroMedia::after {
-    background: linear-gradient(0deg, rgba(10, 20, 8, 0.6) 0%, rgba(10, 20, 8, 0.35) 60%, rgba(10, 20, 8, 0.1) 100%);
   }
   .heroContent {
     top: auto;
