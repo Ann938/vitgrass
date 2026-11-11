@@ -27,21 +27,25 @@ export const nav = [
   { label: "Стать партнером", href: links.partner, external: true },
 ];
 
-// Слайды первого экрана. video — путь к ролику (mp4), когда он появится; до тех пор показывается poster.
+// Слайды первого экрана: ролик (для ДВ 1920×1080, для МВ — вертикальный центр кадра 720×1200) и постер с первого кадра.
 export const slides = [
   {
     title: "Витграсс — забота о своём здоровье",
     titleMobile: "Витграсс это забота о своём здоровье",
     lead: "Замороженный сок из ростков пшеницы",
     poster: "/img/hero-1.webp",
-    video: "",
+    posterMobile: "/img/hero-1-m.webp",
+    video: "/video/hero-1.mp4",
+    videoMobile: "/video/hero-1-m.mp4",
   },
   {
     title: "Цельнозерновая мука с наших полей",
     titleMobile: "Цельнозерновая мука с наших полей",
     lead: "Из отборного зерна на мельнице по старинной технологии",
     poster: "/img/hero-2.webp",
-    video: "",
+    posterMobile: "/img/hero-2-m.webp",
+    video: "/video/hero-2.mp4",
+    videoMobile: "/video/hero-2-m.mp4",
   },
 ];
 export const hero = { order: "Оформить заказ", consult: "Бесплатная консультация" };

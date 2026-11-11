@@ -133,6 +133,7 @@
 }
 .heroText {
   grid-area: 1 / 1;
+  text-shadow: 0 u(2) u(24) rgba(10, 20, 8, 0.35);
   display: flex;
   flex-direction: column;
   gap: u(8);

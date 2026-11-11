@@ -114,6 +114,9 @@ function Hero() {
   const bar = useRef<HTMLSpanElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const go = useCallback((n: number) => setI((n + slides.length) % slides.length), []);
+  // версию ролика выбираем в JS: Safari не понимает media у <source> для видео
+  const [mobile, setMobile] = useState<boolean | null>(null);
+  useEffect(() => setMobile(window.matchMedia("(max-width: 1023px)").matches), []);
 
   useEffect(() => {
     videos.current.forEach((v, k) => k !== i && v?.pause());
@@ -134,7 +137,7 @@ function Hero() {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [i, go]);
+  }, [i, go, mobile]);
 
   // свайп по первому экрану на телефоне
   const sx = useRef<number | null>(null);
@@ -153,16 +156,17 @@ function Hero() {
       <div className={s.heroMedia} aria-hidden="true">
         {slides.map((sl, k) => (
           <div key={k} className={s.heroSlide} data-on={k === i || undefined}>
-            {sl.video ? (
+            {mobile !== null ? (
               <video
                 ref={(el) => {
                   videos.current[k] = el;
                 }}
-                src={src(sl.video)}
-                poster={src(sl.poster)}
+                src={src(mobile ? sl.videoMobile : sl.video)}
+                poster={src(mobile ? sl.posterMobile : sl.poster)}
                 muted
                 playsInline
-                preload={k === 0 ? "auto" : "metadata"}
+                disablePictureInPicture
+                preload={k === i ? "auto" : "metadata"}
               />
             ) : (
               <img src={src(sl.poster)} alt="" fetchPriority={k === 0 ? "high" : "low"} />
