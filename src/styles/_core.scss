@@ -93,6 +93,10 @@ $m-content: 358;
     &::before { left: u($left); width: u($hover-w); }
   }
   &:active::before { left: 0; width: 100%; }
+  // на тач-экранах без анимаций при тапе: капля не выезжает и не заливает
+  @media (hover: none) {
+    &::before { display: none; }
+  }
 }
 
 // ---- Кнопки ----
@@ -118,7 +122,7 @@ $m-content: 358;
   @include drop(var(--yellow));
   background: var(--green);
   color: var(--card);
-  &:active { color: var(--heading); }
+  @media (hover: hover) { &:active { color: var(--heading); } }
 }
 // жёлтая, капля салатовая; нажата — вся зелёная с белым текстом
 @mixin btn-secondary {
@@ -126,8 +130,10 @@ $m-content: 358;
   @include drop(var(--green-light));
   background: var(--yellow);
   color: var(--btn-ink);
-  &:active::before { background: var(--green); }
-  &:active { color: var(--card); }
+  @media (hover: hover) {
+    &:active::before { background: var(--green); }
+    &:active { color: var(--card); }
+  }
 }
 // прозрачная с белой рамкой, капля — затемнение
 @mixin btn-outline {

@@ -374,7 +374,7 @@
   color: var(--green);
   transition: transform 0.25s var(--ease), background 0.3s, opacity 0.3s;
   @include hover { background: var(--green-light); color: var(--card); }
-  &:active { transform: scale(0.92); }
+  @media (hover: hover) { &:active { transform: scale(0.92); } }
   &:disabled { opacity: 0.55; cursor: default; background: var(--yellow); color: var(--green); }
   &:focus-visible { outline: u(2) solid var(--card); outline-offset: u(2); }
 }
@@ -382,6 +382,10 @@
   display: flex;
   gap: u(22);
   overflow-x: auto;
+  overflow-y: hidden; // листается только вбок
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+  align-items: stretch;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   // карточки начинаются от левого края колонки, но листаются до края экрана
@@ -960,7 +964,18 @@
     line-height: u(24);
     opacity: 0.6;
     pointer-events: none;
-    animation: hintIn 0.5s var(--ease);
+    white-space: pre;
+    // мигающий курсор, пока подсказка печатается
+    &[data-typing]::after {
+      content: "";
+      display: inline-block;
+      width: u(1.5);
+      height: 1.1em;
+      margin-left: u(2);
+      vertical-align: -0.15em;
+      background: currentColor;
+      animation: caret 1s steps(1) infinite;
+    }
   }
   .found {
     font-weight: 600;
@@ -1107,8 +1122,8 @@
   }
 }
 
-@keyframes hintIn {
-  from { opacity: 0; transform: translateY(u(8)); }
+@keyframes caret {
+  50% { opacity: 0; }
 }
 @keyframes itemIn {
   from { opacity: 0; transform: translateY(u(6)); }

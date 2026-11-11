@@ -417,13 +417,41 @@ function CityItem({ name, href }: { name: string; href: string }) {
 function Cities() {
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
-  const [hint, setHint] = useState(0);
   const [focus, setFocus] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  // подсказка «печатается»: город набирается по буквам, держится, стирается — и следующий.
+  // При фокусе замирает на целом слове.
+  const [typed, setTyped] = useState(cities.hints[0]);
+  const hintAt = useRef({ k: 0, n: cities.hints[0].length, dir: -1 });
   useEffect(() => {
-    if (focus || q) return;
-    const t = setInterval(() => setHint((h) => (h + 1) % cities.hints.length), 3000);
-    return () => clearInterval(t);
+    if (q) return;
+    const st = hintAt.current;
+    if (focus) {
+      st.n = cities.hints[st.k].length;
+      st.dir = -1;
+      setTyped(cities.hints[st.k]);
+      return;
+    }
+    let t: ReturnType<typeof setTimeout>;
+    const step = () => {
+      const word = cities.hints[st.k];
+      let wait = st.dir > 0 ? 110 : 55;
+      st.n += st.dir;
+      if (st.n >= word.length) {
+        st.n = word.length;
+        st.dir = -1;
+        wait = 1800; // слово набрано — пауза
+      } else if (st.n <= 0) {
+        st.n = 0;
+        st.dir = 1;
+        st.k = (st.k + 1) % cities.hints.length;
+        wait = 350;
+      }
+      setTyped(cities.hints[st.k].slice(0, st.n));
+      t = setTimeout(step, wait);
+    };
+    t = setTimeout(step, 1800);
+    return () => clearTimeout(t);
   }, [focus, q]);
   const query = q.trim().toLowerCase();
   const found = useMemo(() => (query ? cities.items.filter(([n]) => n.toLowerCase().includes(query)) : null), [query]);
@@ -467,8 +495,8 @@ function Cities() {
             autoComplete="off"
           />
           {!q && (
-            <span className={s.hint} key={hint} aria-hidden="true">
-              {cities.hints[hint]}
+            <span className={s.hint} data-typing={focus ? undefined : ""} aria-hidden="true">
+              {typed}
             </span>
           )}
         </label>
