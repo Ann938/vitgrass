@@ -51,7 +51,7 @@ export const slides = [
 export const hero = { order: "Оформить заказ", consult: "Бесплатная консультация" };
 
 export const products = {
-  title: "Наши продукты",
+  title: "Наша продукция",
   items: [
     {
       tags: ["Цельнозерновая", "5 кг"],
