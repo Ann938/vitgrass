@@ -265,23 +265,58 @@ function Products() {
 }
 
 // ---------- 03 · свойства ----------
+// иконки свойств (на МВ — в зелёном круге у заголовка карточки)
+const PROP_ICONS: ReactNode[] = [
+  <path key="e" d="M13 2.5 5 13.5h6.2l-1 8 8-11h-6.2l1-8Z" />,
+  <g key="b">
+    <path d="M10.5 4.5 12.2 9l4.5 1.7-4.5 1.7-1.7 4.6-1.7-4.6-4.6-1.7 4.6-1.7 1.7-4.5Z" />
+    <path d="M18 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z" />
+  </g>,
+  <g key="w">
+    <circle cx="12" cy="9" r="5" />
+    <path d="M12 14v7M9 18h6" />
+  </g>,
+  <path key="s" d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1Z" />,
+  <g key="i">
+    <path d="M12 3 19 6v5.2c0 4.4-2.9 8.1-7 9.8-4.1-1.7-7-5.4-7-9.8V6l7-3Z" />
+    <path d="m9 12 2.2 2.2L15.5 10" />
+  </g>,
+  <path key="m" d="M12 2.8s5.2 4.4 5.2 10.1a5.2 5.2 0 0 1-10.4 0c0-2.5 1.4-4.2 2.6-5.2.3 2 1.3 3.2 2.6 3.2 0-3.1-.9-5.4 0-8.1Z" />,
+];
+const PropIcon = ({ k }: { k: number }) => (
+  <span className={s.propIcon} aria-hidden="true">
+    <svg viewBox="0 0 24 24">{PROP_ICONS[k]}</svg>
+  </span>
+);
+const Leaf = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 19C5 10.7 10.7 5 19 5c0 8.3-5.7 14-14 14Zm0 0 7.5-7.5" />
+  </svg>
+);
+
 function Compound() {
-  const Card = ({ c, k }: { c: { title: string; text: string }; k: number }) => (
+  const Card = ({ c, k, n }: { c: { title: string; text: string }; k: number; n: number }) => (
     <li className={s.propCard} data-reveal style={d(k)}>
-      <h3>{c.title}</h3>
+      <div className={s.propHead}>
+        <PropIcon k={n} />
+        <h3>{c.title}</h3>
+      </div>
       <p>{c.text}</p>
     </li>
   );
+  const ins = compound.inside;
   return (
     <section className={s.compound}>
-      <img className={s.heartM} src={src("/img/heart.webp")} alt="" aria-hidden="true" loading="lazy" />
       <h2 className={s.h2} data-reveal>
         {compound.title}
       </h2>
+      <div className={s.heartM} aria-hidden="true" data-reveal>
+        <img src={src("/img/heart.webp")} alt="" loading="lazy" />
+      </div>
       <div className={s.compoundRow}>
         <ul className={s.propCol}>
           {compound.left.map((c, k) => (
-            <Card key={c.title} c={c} k={k} />
+            <Card key={c.title} c={c} k={k} n={k} />
           ))}
         </ul>
         <div className={s.heart} data-reveal>
@@ -289,7 +324,7 @@ function Compound() {
         </div>
         <ul className={s.propCol}>
           {compound.right.map((c, k) => (
-            <Card key={c.title} c={c} k={k} />
+            <Card key={c.title} c={c} k={k} n={k + 3} />
           ))}
         </ul>
       </div>
@@ -301,6 +336,44 @@ function Compound() {
           </li>
         ))}
       </ul>
+
+      {/* МВ: состав бейджами */}
+      <div className={s.inside} data-reveal>
+        <p className={s.insideTitle}>{ins.title}</p>
+        <div className={s.insideRow}>
+          <b>Витамины</b>
+          <ul className={s.vits}>
+            {ins.vitamins.map((v) => (
+              <li key={v}>{v}</li>
+            ))}
+          </ul>
+        </div>
+        <div className={s.insideRow}>
+          <b>Минералы</b>
+          <ul className={s.elems}>
+            {ins.minerals.map(([sym, name]) => (
+              <li key={sym}>
+                <strong>{sym}</strong>
+                <span>{name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className={s.insidePair}>
+          <div>
+            <p className={s.bigNum}>{ins.amino.num}</p>
+            <b>{ins.amino.label}</b>
+            <span>{ins.amino.text}</span>
+          </div>
+          <div>
+            <span className={s.leaf}>
+              <Leaf />
+            </span>
+            <b>{ins.plant.title}</b>
+            <span>{ins.plant.text}</span>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

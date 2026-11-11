@@ -285,7 +285,9 @@
   gap: u(32);
   .h2 { font-size: u(44); line-height: u(54); text-align: center; }
 }
-.heartM {
+.heartM,
+.inside,
+.propIcon {
   display: none;
 }
 .compoundRow {
@@ -819,17 +821,135 @@
     align-items: stretch;
     gap: u(24);
     overflow: visible;
-    .h2 { font-size: u(28); line-height: u(34); text-align: left; max-width: u(260); }
+    .h2 { font-size: u(28); line-height: u(34); text-align: center; }
   }
-  // сердце из ростков выглядывает справа от заголовка
+  // сердце из ростков — главный визуал блока, на мягком зелёном свечении
   .heartM {
-    display: block;
-    position: absolute;
-    top: u(36);
-    right: u(-58);
-    width: u(124);
-    transform: rotate(26deg);
-    pointer-events: none;
+    display: grid;
+    place-items: center;
+    position: relative;
+    height: u(250);
+    margin-block: u(-4) u(-8);
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 8% 14%;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(131, 199, 35, 0.35), rgba(131, 199, 35, 0));
+    }
+    img { position: relative; height: u(250); width: auto; max-width: none; animation: sway 7s ease-in-out infinite; }
+  }
+  .propHead {
+    display: flex;
+    align-items: center;
+    gap: u(12);
+    h3 { flex: 1; }
+  }
+  .propIcon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: u(44);
+    height: u(44);
+    border-radius: 50%;
+    background: var(--green);
+    svg { width: u(22); height: u(22); fill: none; stroke: var(--card); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  }
+  .propCard {
+    gap: u(10);
+    h3 { font-size: u(18); line-height: u(24); }
+    p { font-size: u(15); line-height: u(22); }
+  }
+  .facts {
+    display: none;
+  }
+  // «Что внутри»: тёмно-зелёная карточка с бейджами
+  .inside {
+    display: flex;
+    flex-direction: column;
+    gap: u(16);
+    padding: u(20);
+    border-radius: u(24);
+    background: radial-gradient(120% 90% at 100% 0%, #5e9a0c 0%, var(--green) 45%, #2f5202 100%);
+    color: var(--card);
+    b { font-weight: 600; font-size: u(15); line-height: u(20); }
+  }
+  .insideTitle {
+    @include display;
+    font-size: u(22);
+    line-height: u(28);
+  }
+  .insideRow {
+    display: flex;
+    flex-direction: column;
+    gap: u(10);
+    padding-top: u(16);
+    border-top: u(1) solid rgba(255, 255, 255, 0.18);
+  }
+  .vits {
+    display: flex;
+    gap: u(8);
+    li {
+      display: grid;
+      place-items: center;
+      width: u(44);
+      height: u(44);
+      border-radius: 50%;
+      background: var(--yellow);
+      color: var(--heading);
+      font-weight: 800;
+      font-size: u(19);
+    }
+  }
+  // как клетки таблицы Менделеева
+  .elems {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: u(6);
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: u(2);
+      padding: u(8) 0 u(6);
+      border-radius: u(10);
+      background: rgba(255, 255, 255, 0.12);
+      border: u(1) solid rgba(255, 255, 255, 0.22);
+    }
+    strong { font-weight: 800; font-size: u(19); line-height: u(24); }
+    span { font-size: u(11); line-height: u(14); opacity: 0.85; }
+  }
+  .insidePair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: u(8);
+    margin-top: u(4);
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: u(4);
+      padding: u(14);
+      border-radius: u(16);
+      background: var(--card);
+      color: var(--heading);
+    }
+    span { font-weight: 500; font-size: u(12); line-height: u(16); color: var(--body); }
+    b { font-size: u(14); line-height: u(18); }
+  }
+  .bigNum {
+    @include display;
+    font-size: u(40);
+    line-height: u(44);
+    color: var(--green);
+  }
+  .leaf {
+    display: grid;
+    place-items: center;
+    width: u(44);
+    height: u(44);
+    border-radius: 50%;
+    background: var(--soft);
+    svg { width: u(24); height: u(24); fill: none; stroke: var(--green); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   }
   .compoundRow {
     flex-direction: column;
