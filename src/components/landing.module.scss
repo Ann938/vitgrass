@@ -51,12 +51,13 @@
   z-index: 20;
   background: var(--bg);
 }
+// шапка, подвал и «Мы на связи» стоят в той же колонке 1280, что и все блоки
 .headerRow {
+  @include container;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: u(80);
-  padding-inline: u(80);
 }
 .logo {
   display: block;
@@ -650,7 +651,8 @@
   display: flex;
   align-items: center;
   min-height: u(308);
-  padding: u(48) u(80);
+  padding-block: u(48);
+  padding-inline: calc((100% - #{u($content)}) / 2);
 }
 .contactsBg {
   position: absolute;
@@ -680,11 +682,11 @@
 
 // ---------- подвал ----------
 .footer {
+  @include container;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: u(80);
-  padding-inline: u(80);
 }
 .footNav {
   display: flex;
@@ -699,6 +701,7 @@
   .onlyM { display: inline; }
 
   .headerRow {
+    width: auto;
     height: u(72);
     padding: u(4) u(20);
   }
@@ -1221,6 +1224,7 @@
   }
 
   .footer {
+    width: auto;
     flex-direction: column;
     gap: u(8);
     height: auto;
