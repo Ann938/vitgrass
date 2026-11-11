@@ -346,13 +346,9 @@ function Reviews() {
         {reviews.items.map((r, k) => (
           <li key={r.name} className={s.review} data-reveal style={d(k)}>
             <div className={s.reviewHead}>
-              {"img" in r && r.img ? (
-                <img src={src(r.img)} alt="" loading="lazy" />
-              ) : (
-                <span className={s.initial} aria-hidden="true">
-                  {r.name[0]}
-                </span>
-              )}
+              <span className={s.initial} aria-hidden="true">
+                {r.name[0]}
+              </span>
               <div>
                 <p className={s.stars} aria-label="Оценка 5 из 5">
                   {[0, 1, 2, 3, 4].map((n) => (
