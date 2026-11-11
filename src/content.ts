@@ -135,12 +135,13 @@ export const compound = {
   },
 };
 
-// Отзывы — со старого сайта vitgrassalina.ru (имена и города как там; фото у авторов не было — инициалы)
+// Отзывы — со старого сайта vitgrassalina.ru (имена, города и фото как там; фото вынуты из SVG-аватаров Тильды)
 export const reviews = {
   title: "Отзывы",
   items: [
     {
       name: "Венера",
+      img: "/img/r-venera.webp",
       city: "г. Казань",
       text: [
         "Хочу ещё раз вас поблагодарить за ваш огромный труд!!!",
@@ -150,6 +151,7 @@ export const reviews = {
     },
     {
       name: "Гульназ",
+      img: "/img/r-gulnaz.webp",
       city: "г. Самара",
       text: [
         "Добрый вечер!",
@@ -161,6 +163,7 @@ export const reviews = {
     },
     {
       name: "Регина",
+      img: "/img/r-regina.webp",
       city: "г. Туймазы",
       text: [
         "Здравствуйте. Все хорошо.",
@@ -171,6 +174,7 @@ export const reviews = {
     },
     {
       name: "Лейсан",
+      img: "/img/r-leysan.webp",
       city: "г. Казань",
       text: ["Это просто магия какая-то!!!!", "30 мл живого сока как меняют самочувствие, настроение, здоровье, мысли!!!!"],
     },
