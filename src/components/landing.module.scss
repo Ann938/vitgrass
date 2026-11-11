@@ -98,18 +98,15 @@
   inset: 0;
   opacity: 0;
   transition: opacity 1s var(--ease);
+  // ролик без масштабирования: наложенный «наезд» камеры давал тряску поверх движения в кадре
   img,
   video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scale(1.06);
-    transition: transform 8s linear;
   }
   &[data-on] {
     opacity: 1;
-    img,
-    video { transform: scale(1); }
   }
 }
 .heroContent {
@@ -1250,6 +1247,4 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .heart img { animation: none; }
-  .heroSlide img,
-  .heroSlide video { transition: none; transform: none; }
 }
