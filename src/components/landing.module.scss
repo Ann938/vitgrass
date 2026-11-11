@@ -307,6 +307,7 @@
   flex-direction: column;
   gap: u(8);
   min-height: u(165);
+  .propText { display: flex; flex-direction: column; gap: u(8); }
   h3 { @include type-card; max-width: u(328); }
   p { @include type-body; max-width: u(328); }
 }
@@ -658,7 +659,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
+  img { width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
   &::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.4); }
 }
 .contactsCard {
@@ -839,12 +840,6 @@
     }
     img { position: relative; height: u(250); width: auto; max-width: none; animation: sway 7s ease-in-out infinite; }
   }
-  .propHead {
-    display: flex;
-    align-items: center;
-    gap: u(12);
-    h3 { flex: 1; }
-  }
   .propIcon {
     display: grid;
     place-items: center;
@@ -855,8 +850,12 @@
     background: var(--green);
     svg { width: u(22); height: u(22); fill: none; stroke: var(--card); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   }
+  // иконка слева, заголовок и описание — колонкой по центру иконки
   .propCard {
-    gap: u(10);
+    flex-direction: row;
+    align-items: center;
+    gap: u(14);
+    .propText { flex: 1; gap: u(4); }
     h3 { font-size: u(18); line-height: u(24); }
     p { font-size: u(15); line-height: u(22); }
   }

@@ -297,11 +297,11 @@ const Leaf = () => (
 function Compound() {
   const Card = ({ c, k, n }: { c: { title: string; text: string }; k: number; n: number }) => (
     <li className={s.propCard} data-reveal style={d(k)}>
-      <div className={s.propHead}>
-        <PropIcon k={n} />
+      <PropIcon k={n} />
+      <div className={s.propText}>
         <h3>{c.title}</h3>
+        <p>{c.text}</p>
       </div>
-      <p>{c.text}</p>
     </li>
   );
   const ins = compound.inside;
