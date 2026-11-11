@@ -35,7 +35,18 @@ function A({ href, className, children, ...rest }: { href: string; className?: s
 function Rich({ lines }: { lines: string[] }) {
   const out: ReactNode[] = [];
   let list: string[] = [];
-  const bold = (t: string) => t.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 ? <b key={i}>{p}</b> : p));
+  // **жирный** и [ссылка](url)
+  const link = (t: string, k: number) =>
+    t.split(/\[(.+?)\]\((.+?)\)/g).map((p, i, arr) =>
+      i % 3 === 1 ? (
+        <A key={`${k}-${i}`} href={arr[i + 1]} className={s.accLink}>
+          {p}
+        </A>
+      ) : i % 3 === 2 ? null : (
+        p
+      ),
+    );
+  const bold = (t: string) => t.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 ? <b key={i}>{p}</b> : link(p, i)));
   const flush = () => {
     if (list.length) out.push(<ul key={out.length}>{list.map((l, i) => <li key={i}>{bold(l)}</li>)}</ul>);
     list = [];
