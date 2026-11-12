@@ -124,14 +124,13 @@ $m-content: 358;
   color: var(--card);
   @media (hover: hover) { &:active { color: var(--heading); } }
 }
-// жёлтая, капля салатовая; нажата — вся зелёная с белым текстом
+// жёлтая, капля зелёная (#497b02); нажата — вся зелёная с белым текстом
 @mixin btn-secondary {
   @include btn-base;
-  @include drop(var(--green-light));
+  @include drop(var(--green));
   background: var(--yellow);
   color: var(--btn-ink);
   @media (hover: hover) {
-    &:active::before { background: var(--green); }
     &:active { color: var(--card); }
   }
 }

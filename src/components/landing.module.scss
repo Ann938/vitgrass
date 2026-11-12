@@ -378,7 +378,7 @@
   background: var(--yellow);
   color: var(--green);
   transition: transform 0.25s var(--ease), background 0.3s, opacity 0.3s;
-  @include hover { background: var(--green-light); color: var(--card); }
+  @include hover { background: var(--green); color: var(--card); }
   @media (hover: hover) { &:active { transform: scale(0.92); } }
   &:disabled { opacity: 0.55; cursor: default; background: var(--yellow); color: var(--green); }
   &:focus-visible { outline: u(2) solid var(--card); outline-offset: u(2); }
