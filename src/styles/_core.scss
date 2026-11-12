@@ -132,6 +132,23 @@ $m-content: 358;
   color: var(--btn-ink);
   @media (hover: hover) {
     &:active { color: var(--card); }
+    // белая копия подписи (data-label) видна только в форме капли —
+    // белеют лишь те части букв, на которые заехала зелёная капля
+    &[data-label]::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-inline: inherit;
+      color: var(--card);
+      pointer-events: none;
+      clip-path: inset(0 100% 0 0 round u(100));
+      transition: clip-path 0.45s var(--ease);
+    }
+    &[data-label]:hover::after { clip-path: inset(0 calc(100% - #{u(69)}) 0 0 round u(100)); }
+    &[data-label]:active::after { clip-path: inset(0 0 0 0 round u(100)); }
   }
 }
 // прозрачная с белой рамкой, капля — затемнение

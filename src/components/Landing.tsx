@@ -204,7 +204,7 @@ function Hero() {
             ))}
           </div>
           <div className={s.heroBtns}>
-            <a href="#products" className={s.btnSecondary}>
+            <a href="#products" className={s.btnSecondary} data-label={hero.order}>
               {hero.order}
             </a>
             <A href={links.consult} className={s.btnOutline}>
@@ -622,7 +622,7 @@ function Cities() {
       <div className={s.partner} data-reveal>
         <img src={src("/img/reviews-bg.webp")} alt="" aria-hidden="true" loading="lazy" />
         <p>{cities.partner}</p>
-        <A href={links.partner} className={s.btnSecondary}>
+        <A href={links.partner} className={s.btnSecondary} data-label={cities.partnerCta}>
           {cities.partnerCta}
         </A>
       </div>
@@ -702,7 +702,7 @@ function Contacts() {
           <a href={links.phone} className={s.btnPrimary}>
             {contacts.call}
           </a>
-          <A href={links.whatsapp} className={s.btnSecondary}>
+          <A href={links.whatsapp} className={s.btnSecondary} data-label={contacts.write}>
             {contacts.write}
           </A>
         </div>
