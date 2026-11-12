@@ -142,7 +142,7 @@ function Hero() {
     const tick = (t: number) => {
       const vid = videos.current[i];
       const p = vid && vid.duration ? vid.currentTime / vid.duration : (t - start) / SLIDE;
-      if (bar.current) bar.current.style.transform = `scaleX(${Math.min(1, p)})`;
+      if (bar.current) bar.current.style.clipPath = `inset(0 ${(1 - Math.min(1, p)) * 100}% 0 0 round 999px)`;
       if (p >= 1) go(i + 1);
       else raf = requestAnimationFrame(tick);
     };

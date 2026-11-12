@@ -206,8 +206,8 @@
       margin-top: u(-4);
       border-radius: u(100);
       background: var(--card);
-      transform-origin: left;
-      transform: scaleX(0);
+      // обрезка со скруглением, а не scaleX — иначе конец полоски сплющивается
+      clip-path: inset(0 100% 0 0 round 999px);
     }
   }
 }
