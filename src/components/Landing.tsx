@@ -102,7 +102,7 @@ function Header() {
         <Logo className={s.logo} />
         <nav className={s.nav} aria-label="Разделы">
           {nav.map((n) => (
-            <A key={n.label} href={n.href} className={s.navLink} onClick={() => setOpen(false)}>
+            <A key={n.label} href={n.href} className={n.mobile ? `${s.navLink} ${s.navMob}` : s.navLink} onClick={() => setOpen(false)}>
               {n.label}
             </A>
           ))}

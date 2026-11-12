@@ -71,6 +71,10 @@
   align-items: center;
   gap: u(32);
 }
+// пункт только для мобильного меню
+.navMob {
+  @include desktop { display: none; }
+}
 .burger {
   display: none;
 }

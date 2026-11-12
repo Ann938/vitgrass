@@ -19,7 +19,8 @@ export const site = {
     "Замороженный сок из ростков пшеницы, сублимированный сок и цельнозерновая мука с собственных полей. Представители в 24 городах.",
 };
 
-export const nav = [
+export const nav: { label: string; href: string; external?: boolean; mobile?: boolean }[] = [
+  { label: "Наши продукты", href: "#products", mobile: true },
   { label: "Отзывы", href: "#reviews" },
   { label: "Вопросы", href: "#faq" },
   { label: "Контакты", href: "#contacts" },
