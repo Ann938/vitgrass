@@ -1285,3 +1285,15 @@
     .footer .logo { width: u(150); height: u(49); }
   }
 }
+
+// тест: заголовки заглавными, как на слайдах гайдлайна BODAI (/bodai-caps).
+// Заглавные шире строчных — кегль чуть меньше, чтобы строки не распирало
+.caps {
+  .h1, .h2, .contactsCard h2 { font-family: var(--font-caps), system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.01em; }
+  .h1 { font-size: u(48); max-width: u(760); }
+  .h2 { font-size: u(40); }
+  @include mobile {
+    .h1 { font-size: u(28); line-height: u(36); }
+    .h2 { font-size: u(24); line-height: u(30); }
+  }
+}

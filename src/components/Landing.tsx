@@ -755,11 +755,11 @@ function useReveal() {
   }, []);
 }
 
-export default function Landing({ brand = "" }: { brand?: "" | "bodai" }) {
+export default function Landing({ brand = "", caps = false }: { brand?: "" | "bodai"; caps?: boolean }) {
   useReveal();
   return (
     <Brand.Provider value={brand}>
-    <div className={brand === "bodai" ? s.bodai : undefined} style={brand ? undefined : { display: "contents" }}>
+    <div className={brand === "bodai" ? `${s.bodai}${caps ? ` ${s.caps}` : ""}` : undefined} style={brand ? undefined : { display: "contents" }}>
       <Header />
       <main>
         <Hero />
