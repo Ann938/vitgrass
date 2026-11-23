@@ -1273,21 +1273,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   font-style: normal;
   color: var(--heading);
 }
-// подсветка списка после кнопки «Выбрать город» на первом экране
-.cities[data-flash] .item,
-.cities[data-flash] .search { animation: cityFlash 1.8s var(--ease) 0.45s; }
-@keyframes cityFlash {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 237, 0, 0); }
-  30% { box-shadow: 0 0 0 u(3) var(--yellow); }
-}
-// подсказка под кнопками первого экрана — меняется вместе со слайдом
-.heroHint {
-  margin-top: u(-8);
-  font: 500 u(14) / u(20) var(--font-sans), system-ui, sans-serif;
-  color: rgba(255, 255, 255, 0.8);
-  animation: hintIn 0.5s var(--ease);
-}
-@keyframes hintIn { from { opacity: 0; transform: translateY(u(4)); } }
+
 
 .repLayer {
   position: fixed;
@@ -1383,10 +1369,13 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   color: var(--heading);
 }
 
-// кнопки как на сайте: MAX — зелёная с жёлтой каплей, звонок — жёлтая
+// кнопки в цветах сайта; при наведении заливаются другим цветом целиком:
+// жёлтая «Звонок» → зелёная с белым текстом, зелёная MAX → жёлтая с тёмным текстом
 .repChips { display: flex; gap: u(8); }
 .repChip {
-  @include drop(rgba(0, 62, 21, 0.16), 60);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   flex: 1;
   display: inline-flex;
   align-items: center;
@@ -1401,16 +1390,34 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   color: var(--btn-ink);
   white-space: nowrap;
   cursor: pointer;
-  transition: color 0.3s, transform 0.2s var(--ease);
-  img { width: u(18); height: u(18); }
+  transition: color 0.35s var(--ease);
+  --fill: var(--green);
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--fill);
+    clip-path: inset(0 100% 0 0 round u(100));
+    transition: clip-path 0.45s var(--ease);
+  }
+  img { width: u(18); height: u(18); transition: filter 0.35s var(--ease); }
   img[width="24"] { width: u(22); height: u(22); margin: 0 u(-2); }
+  @media (hover: hover) {
+    &:hover { color: var(--card); img { filter: brightness(0) invert(1); } }
+    &:hover::before { clip-path: inset(0 0 0 0 round u(100)); }
+  }
   &[data-main] {
-    @include drop(var(--yellow), 60);
     background: var(--green);
     color: var(--card);
-    .repVk { color: var(--card); }
-    @media (hover: hover) { &:active { color: var(--heading); } }
+    --fill: var(--yellow);
+    .repVk { color: inherit; }
+    @media (hover: hover) {
+      &:hover { color: var(--heading); img { filter: brightness(0) saturate(100%) invert(14%) sepia(60%) saturate(2400%) hue-rotate(118deg) brightness(92%); } }
+    }
   }
+  &:active { transform: scale(0.98); }
   &:focus-visible { outline: u(2) solid var(--green); outline-offset: u(2); }
 }
 .repVk { font: 800 u(11) / 1 var(--font-sans), system-ui, sans-serif; color: var(--heading); }
@@ -1421,7 +1428,6 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 
 // МВ: нижняя панель
 @include mobile {
-  .heroHint { margin-top: 0; text-align: center; font-size: u(13); }
   .repLayer { place-items: end stretch; padding: 0; }
   .repBox,
   .repBox[data-one] {
@@ -1453,8 +1459,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 }
 @keyframes repSheet { from { transform: translateY(100%); } }
 @media (prefers-reduced-motion: reduce) {
-  .repLayer, .repBox, .repBox[data-one], .repCard, .heroHint { animation: none; }
-  .cities[data-flash] .item, .cities[data-flash] .search { animation: none; }
+  .repLayer, .repBox, .repBox[data-one], .repCard { animation: none; }
 }
 
 // ---------- Вариант BODAI (/bodai): палитра и логотип из гайдлайна BODAI ----------

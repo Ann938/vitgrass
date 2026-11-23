@@ -221,7 +221,6 @@ function Hero() {
               href={slides[i].cta.href}
               className={s.btnSecondary}
               data-label={slides[i].cta.label}
-              onClick={slides[i].cta.href === "#cities" ? flashCities : undefined}
             >
               {slides[i].cta.label}
             </a>
@@ -229,9 +228,6 @@ function Hero() {
               {hero.consult}
             </A>
           </div>
-          <p key={i} className={s.heroHint}>
-            {slides[i].cta.hint}
-          </p>
         </div>
         <div className={s.carousel}>
           <p className={s.counter} aria-live="polite">
@@ -506,9 +502,6 @@ function Advantages() {
 const DEFAULT_COUNT = 5;
 const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "Найден" : "Найдено") + ` ${n} ` + (n % 10 === 1 && n % 100 !== 11 ? "город" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "города" : "городов");
 
-// «Выбрать город» на первом экране: после прокрутки список ненадолго подсвечивается
-const flashCities = () => window.dispatchEvent(new Event("cities:flash"));
-
 function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
   return (
     <li>
@@ -627,7 +620,6 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                   )}
                   {r.vk && (
                     <A href={r.vk} className={s.repChip} data-main="">
-                      <span className={s.repVk} aria-hidden="true">VK</span>
                       ВКонтакте
                     </A>
                   )}
@@ -649,21 +641,6 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
 
 function Cities() {
   const [open, setOpen] = useState<City | null>(null);
-  const [flash, setFlash] = useState(false);
-  useEffect(() => {
-    let tm: ReturnType<typeof setTimeout>;
-    const on = () => {
-      setFlash(false);
-      requestAnimationFrame(() => setFlash(true));
-      clearTimeout(tm);
-      tm = setTimeout(() => setFlash(false), 2600);
-    };
-    window.addEventListener("cities:flash", on);
-    return () => {
-      window.removeEventListener("cities:flash", on);
-      clearTimeout(tm);
-    };
-  }, []);
   const close = useCallback(() => setOpen(null), []);
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
@@ -713,7 +690,7 @@ function Cities() {
   const cols = [0, 1, 2].map((c) => shownCities.slice(c * per, c * per + per));
 
   return (
-    <section className={s.cities} id="cities" data-flash={flash || undefined}>
+    <section className={s.cities} id="cities">
       <div className={s.citiesHead} data-reveal>
         <h2 className={s.h2}>{cities.title}</h2>
         <p>{cities.lead}</p>
