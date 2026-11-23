@@ -14,6 +14,8 @@ import {
   reviews,
   slides,
   story,
+  type City,
+  type Rep,
 } from "@/content";
 import s from "./landing.module.scss";
 
@@ -495,18 +497,168 @@ function Advantages() {
 const DEFAULT_COUNT = 5;
 const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "Найден" : "Найдено") + ` ${n} ` + (n % 10 === 1 && n % 100 !== 11 ? "город" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "города" : "городов");
 
-function CityItem({ name, href }: { name: string; href: string }) {
+function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
   return (
     <li>
-      <A href={href} className={s.item}>
-        <span>{name}</span>
+      <button type="button" className={s.item} onClick={() => onOpen(city)}>
+        <span>{city.name}</span>
         <Chevron />
-      </A>
+      </button>
     </li>
   );
 }
 
+// ---------- попап «Представители в …» (макет 544:667) ----------
+// Один представитель — «Заказать в …»: крупная карточка и три кнопки-строки;
+// несколько — карточки с кнопками-чипами (ДВ — две колонки). На МВ — нижняя панель.
+// Ссылки на чат MAX по номеру телефона нет — кнопка MAX копирует номер, его вставляют в поиск MAX.
+const tel = (p: string) => `tel:+${p}`;
+const fmt = (p: string) => `+${p[0]} ${p.slice(1, 4)} ${p.slice(4, 7)}-${p.slice(7, 9)}-${p.slice(9)}`;
+const igUrl = (n: string) => `https://www.instagram.com/${n}/`;
+const repTitle = (r: Rep) => r.name || (r.ig ? `@${r.ig}` : "Представитель");
+const repSub = (r: Rep) => r.note || (r.name && r.ig ? `@${r.ig}` : r.phone ? fmt(r.phone) : "Принимает заказы");
+const initials = (r: Rep) => (r.name || r.ig || "В").replace(/[^A-Za-zА-Яа-яЁё]/g, "").slice(0, 1).toUpperCase();
+
+function Avatar({ r }: { r: Rep }) {
+  return r.photo ? (
+    <img className={s.repPhoto} src={src(r.photo)} alt="" />
+  ) : (
+    <span className={s.repPhoto} aria-hidden="true">
+      {initials(r)}
+    </span>
+  );
+}
+
+function useCopied() {
+  const [copied, setCopied] = useState("");
+  const copy = (p: string) => {
+    navigator.clipboard?.writeText(`+${p}`).catch(() => {});
+    setCopied(p);
+    setTimeout(() => setCopied((c) => (c === p ? "" : c)), 2600);
+  };
+  return { copied, copy };
+}
+
+function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
+  const box = useRef<HTMLDivElement>(null);
+  const { copied, copy } = useCopied();
+  useEffect(() => {
+    document.documentElement.style.overflow = "hidden";
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", esc);
+    box.current?.focus();
+    return () => {
+      document.documentElement.style.overflow = "";
+      window.removeEventListener("keydown", esc);
+    };
+  }, [onClose]);
+  const one = city.reps.length === 1 ? city.reps[0] : null;
+  const title = one ? `Заказать в ${city.loc}` : `Представители в ${city.loc}`;
+  return (
+    <div className={s.repLayer} onClick={onClose}>
+      <div ref={box} className={s.repBox} data-one={one ? "" : undefined} role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
+        <span className={s.repHandle} aria-hidden="true" />
+        <div className={s.repHead}>
+          <h3>{title}</h3>
+          <button type="button" className={s.repClose} onClick={onClose} aria-label="Закрыть">
+            <img src={src("/img/rep/close.svg")} alt="" width={20} height={20} />
+          </button>
+        </div>
+        {one ? (
+          <>
+            <div className={s.repBig}>
+              <Avatar r={one} />
+              <div>
+                <p className={s.repName}>{repTitle(one)}</p>
+                <p className={s.repSub}>{one.note || "Принимает заказы"}</p>
+              </div>
+            </div>
+            {(one.phone || one.ig || one.vk) && <p className={s.repLead}>Выберите удобный способ связи</p>}
+            <div className={s.repRows}>
+              {one.phone && (
+                <button type="button" className={s.repRow} data-main="" onClick={() => copy(one.phone!)}>
+                  <img src={src("/img/rep/max-w.svg")} alt="" width={20} height={20} />
+                  <span>{copied === one.phone ? "Номер скопирован — найдите его в MAX" : "Написать в MAX"}</span>
+                  <img src={src("/img/rep/right-w.svg")} alt="" width={20} height={20} />
+                </button>
+              )}
+              {one.ig && (
+                <A href={igUrl(one.ig)} className={s.repRow}>
+                  <img src={src("/img/rep/ig-16.svg")} alt="" width={20} height={20} />
+                  <span>Написать в Instagram</span>
+                  <img src={src("/img/rep/right.svg")} alt="" width={20} height={20} />
+                </A>
+              )}
+              {one.vk && (
+                <A href={one.vk} className={s.repRow}>
+                  <span className={s.repVk} aria-hidden="true">VK</span>
+                  <span>Написать во ВКонтакте</span>
+                  <img src={src("/img/rep/right.svg")} alt="" width={20} height={20} />
+                </A>
+              )}
+              {one.phone && (
+                <a href={tel(one.phone)} className={s.repRow}>
+                  <img src={src("/img/rep/call.svg")} alt="" width={24} height={24} />
+                  <span>Позвонить</span>
+                  <img src={src("/img/rep/right.svg")} alt="" width={20} height={20} />
+                </a>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <p className={s.repLead}>Выберите, с кем связаться для заказа</p>
+            <div className={s.repGrid}>
+              {city.reps.map((r, k) => (
+                <div key={k} className={s.repCard}>
+                  <div className={s.repWho}>
+                    <Avatar r={r} />
+                    <div>
+                      <p className={s.repName}>{repTitle(r)}</p>
+                      <p className={s.repSub}>{copied && copied === r.phone ? "Номер скопирован — найдите в MAX" : repSub(r)}</p>
+                    </div>
+                  </div>
+                  {(r.phone || r.ig || r.vk) && (
+                    <div className={s.repChips}>
+                      {r.phone && (
+                        <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
+                          <img src={src("/img/rep/max.svg")} alt="" width={18} height={18} />
+                          MAX
+                        </button>
+                      )}
+                      {r.ig && (
+                        <A href={igUrl(r.ig)} className={s.repChip}>
+                          <img src={src("/img/rep/ig.svg")} alt="" width={18} height={18} />
+                          Instagram
+                        </A>
+                      )}
+                      {r.vk && (
+                        <A href={r.vk} className={s.repChip}>
+                          <span className={s.repVk} aria-hidden="true">VK</span>
+                          ВКонтакте
+                        </A>
+                      )}
+                      {r.phone && (
+                        <a href={tel(r.phone)} className={s.repChip}>
+                          <img src={src("/img/rep/call.svg")} alt="" width={24} height={24} />
+                          Звонок
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Cities() {
+  const [open, setOpen] = useState<City | null>(null);
+  const close = useCallback(() => setOpen(null), []);
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
   const [focus, setFocus] = useState(false);
@@ -546,7 +698,7 @@ function Cities() {
     return () => clearTimeout(t);
   }, [focus, q]);
   const query = q.trim().toLowerCase();
-  const found = useMemo(() => (query ? cities.items.filter(([n]) => n.toLowerCase().includes(query)) : null), [query]);
+  const found = useMemo(() => (query ? cities.items.filter((c) => c.name.toLowerCase().includes(query)) : null), [query]);
   const reset = () => {
     setQ("");
     input.current?.focus();
@@ -565,8 +717,8 @@ function Cities() {
       <div className={s.cityCols}>
         {cols.map((col, c) => (
           <ul key={c} data-reveal style={d(c)}>
-            {col.map(([n, h]) => (
-              <CityItem key={n} name={n} href={h} />
+            {col.map((c) => (
+              <CityItem key={c.name} city={c} onOpen={setOpen} />
             ))}
           </ul>
         ))}
@@ -599,8 +751,8 @@ function Cities() {
             <>
               <p className={s.found}>{plural(found.length)}</p>
               <ul className={s.cityList}>
-                {found.map(([n, h]) => (
-                  <CityItem key={n} name={n} href={h} />
+                {found.map((c) => (
+                  <CityItem key={c.name} city={c} onOpen={setOpen} />
                 ))}
               </ul>
               <button type="button" className={s.toggle} onClick={reset}>
@@ -619,7 +771,7 @@ function Cities() {
         ) : (
           <>
             <ul className={s.cityList}>
-              {cities.items.map(([n, h], k) => (k < DEFAULT_COUNT || all ? <CityItem key={n} name={n} href={h} /> : null))}
+              {cities.items.map((c, k) => (k < DEFAULT_COUNT || all ? <CityItem key={c.name} city={c} onOpen={setOpen} /> : null))}
             </ul>
             <button type="button" className={s.toggle} aria-expanded={all} onClick={() => setAll(!all)}>
               {all ? "Свернуть список" : `Все города · ${cities.items.length}`}
@@ -628,6 +780,8 @@ function Cities() {
           </>
         )}
       </div>
+
+      {open && <RepDialog city={open} onClose={close} />}
 
       <div className={s.partner} data-reveal>
         <img src={src("/img/reviews-bg.webp")} alt="" aria-hidden="true" loading="lazy" />
