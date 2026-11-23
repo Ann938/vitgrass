@@ -1278,10 +1278,10 @@
   .inside { background: radial-gradient(120% 90% at 100% 0%, #1d6b33 0%, #003e15 50%, #00280e 100%); }
 
   // логотип BODAI горизонтальный — шире, ниже прежнего солнышка
-  .logo { width: u(150); height: u(38); img { object-fit: contain; } }
-  .footer .logo { width: u(170); height: u(56); }
+  // высота 32 и на ДВ, и на МВ (ширина — по пропорциям, 900×226)
+  .logo { width: auto; height: 32px; img { width: auto; height: 100%; object-fit: contain; } }
+  .footer .logo { width: u(170); height: u(56); img { width: 100%; } }
   @include mobile {
-    .logo { width: u(120); height: u(30); }
     .footer .logo { width: u(150); height: u(49); }
   }
 }
