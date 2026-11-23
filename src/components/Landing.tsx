@@ -510,14 +510,18 @@ function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
 }
 
 // ---------- попап «Представители в …» (макет 544:667) ----------
-// Связь — MAX и звонок (Instagram из способов связи убран 23.11, ник остаётся подписью).
+// Связь — MAX и звонок (Instagram убран 23.11). Под именем — телефон.
 // Один представитель — «Заказать в …», несколько — «Представители в …»; карточки одинаковые,
 // мессенджеры в ряд (ДВ — две колонки, у одного — одна). На МВ — нижняя панель.
 // Ссылки на чат MAX по номеру телефона нет — кнопка MAX копирует номер, его вставляют в поиск MAX.
 const tel = (p: string) => `tel:+${p}`;
 const fmt = (p: string) => `+${p[0]} ${p.slice(1, 4)} ${p.slice(4, 7)}-${p.slice(7, 9)}-${p.slice(9)}`;
-const repTitle = (r: Rep) => r.name || (r.ig ? `@${r.ig}` : "Представитель");
-const repSub = (r: Rep) => r.note || (r.name && r.ig ? `@${r.ig}` : r.phone ? fmt(r.phone) : "Принимает заказы");
+const repTitle = (r: Rep) => r.name || "Представитель";
+const repSub = (r: Rep) => r.note || (r.phone ? fmt(r.phone) : "Принимает заказы");
+// Instagram не показываем совсем (ни кнопкой, ни @ником). Представители только с Instagram скрыты,
+// города, где никого не осталось, — тоже (данные в content.ts сохранены — вернуть, когда будут телефоны).
+const hasContact = (r: Rep) => !!(r.phone || r.vk || r.note);
+const shownCities = cities.items.map((c) => ({ ...c, reps: c.reps.filter(hasContact) })).filter((c) => c.reps.length);
 const initials = (r: Rep) => (r.name || r.ig || "В").replace(/[^A-Za-zА-Яа-яЁё]/g, "").slice(0, 1).toUpperCase();
 
 function Avatar({ r }: { r: Rep }) {
@@ -649,13 +653,13 @@ function Cities() {
     return () => clearTimeout(t);
   }, [focus, q]);
   const query = q.trim().toLowerCase();
-  const found = useMemo(() => (query ? cities.items.filter((c) => c.name.toLowerCase().includes(query)) : null), [query]);
+  const found = useMemo(() => (query ? shownCities.filter((c) => c.name.toLowerCase().includes(query)) : null), [query]);
   const reset = () => {
     setQ("");
     input.current?.focus();
   };
-  const per = Math.ceil(cities.items.length / 3);
-  const cols = [0, 1, 2].map((c) => cities.items.slice(c * per, c * per + per));
+  const per = Math.ceil(shownCities.length / 3);
+  const cols = [0, 1, 2].map((c) => shownCities.slice(c * per, c * per + per));
 
   return (
     <section className={s.cities} id="cities">
@@ -722,10 +726,10 @@ function Cities() {
         ) : (
           <>
             <ul className={s.cityList}>
-              {cities.items.map((c, k) => (k < DEFAULT_COUNT || all ? <CityItem key={c.name} city={c} onOpen={setOpen} /> : null))}
+              {shownCities.map((c, k) => (k < DEFAULT_COUNT || all ? <CityItem key={c.name} city={c} onOpen={setOpen} /> : null))}
             </ul>
             <button type="button" className={s.toggle} aria-expanded={all} onClick={() => setAll(!all)}>
-              {all ? "Свернуть список" : `Все города · ${cities.items.length}`}
+              {all ? "Свернуть список" : `Все города · ${shownCities.length}`}
               <Chevron dir={all ? "up" : "down"} />
             </button>
           </>
