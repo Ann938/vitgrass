@@ -92,7 +92,7 @@ export const products = {
       tags: ["Для партнёров"],
       name: "Хотите представлять Витграсс в своём городе?",
       // исходник был круглым на белом — кадр достроен (небо сверху, края), все пятеро целиком
-      img: "/img/p-partners-full.webp",
+      img: "/img/p-partners-alt.webp", // пробуем групповое фото из макета 557:1342 (прежнее — p-partners-full.webp)
       cta: "Узнать подробнее",
       href: links.partner,
       accent: true,
