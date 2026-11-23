@@ -1572,6 +1572,21 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .searchClear { width: u(28); height: u(28); }
 }
 
+// продукция: если в последнем ряду две карточки (5 штук), последняя — широкая на две колонки,
+// фото слева, текст и кнопка справа (после снятия муки «Солнечная», 23.11)
+@include desktop {
+  .productGrid > li:last-child:nth-child(3n + 2) {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: u(24);
+    .productImg { grid-row: 1 / -1; height: 100%; min-height: u(216); }
+    .productText { grid-column: 2; padding-top: u(8); }
+    .btnPrimary { grid-column: 2; grid-row: 3; }
+  }
+}
+
 // ---------- Вариант BODAI (/bodai): палитра и логотип из гайдлайна BODAI ----------
 // display: contents — обёртка не влияет на раскладку, только задаёт переменные
 .bodai {

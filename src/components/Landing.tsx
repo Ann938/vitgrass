@@ -234,13 +234,9 @@ function Hero() {
             ))}
           </div>
           <div className={s.heroBtns}>
-            <a
-              href={slides[i].cta.href}
-              className={s.btnSecondary}
-              data-label={slides[i].cta.label}
-            >
+            <A href={slides[i].cta.href} className={s.btnSecondary} data-label={slides[i].cta.label}>
               {slides[i].cta.label}
-            </a>
+            </A>
             <A href={links.consult} className={s.btnOutline}>
               {hero.consult}
             </A>

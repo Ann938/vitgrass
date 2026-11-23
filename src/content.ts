@@ -51,8 +51,8 @@ export const slides = [
     posterMobile: "/img/hero-2-m.webp",
     video: "/video/hero-2.mp4",
     videoMobile: "/video/hero-2-m.mp4",
-    // мука продаётся на Ozon, сортов два — ведём к карточкам муки
-    cta: { label: "Купить на Ozon", href: "#products" },
+    // мука одна («Солнечную» сняли с производства) — ведём прямо на Ozon
+    cta: { label: "Купить на Ozon", href: "https://ozon.ru/t/k43Aaew" },
   },
 ];
 export const hero = { order: "Оформить заказ", consult: "Бесплатная консультация" };
@@ -66,14 +66,6 @@ export const products = {
       img: "/img/p-flour-violet.webp",
       cta: "Оформить заказ",
       href: "https://ozon.ru/t/k43Aaew",
-    },
-    {
-      tags: ["Цельнозерновая", "5 кг"],
-      name: "Мука «Солнечная»",
-      img: "/img/p-flour-sun.webp",
-      crop: { w: 100, h: 167.59, l: 0, t: -43.98 }, // кадр как в макете
-      cta: "Оформить заказ",
-      href: "https://ozon.ru/t/Z60bBy2",
     },
     {
       tags: ["Витграсс", "Порционный сок"],
@@ -219,18 +211,18 @@ export const cities = {
     { name: "Азнакаево", loc: "Азнакаево", reps: [{ name: "Алсу", ig: "vitgrass_zainsk", phone: "79656118266" }] },
     { name: "Алексеевск", loc: "Алексеевске", reps: [{ name: "Алсу", phone: "79377721789" }] },
     { name: "Альметьевск", loc: "Альметьевске", reps: [{ name: "Магазин «Биомаркет»", note: "ул. Радищева, 18" }, { ig: "xfit_almet" }] },
-    { name: "Арск", loc: "Арске", reps: [{ ig: "zalyalieva_gelusa" }] },
+    { name: "Арск", loc: "Арске", reps: [{ name: "Гелюся", ig: "zalyalieva_gelusa", phone: "79600455883" }] },
     { name: "Балаково", loc: "Балаково", reps: [{ name: "Алена", phone: "79267932606" }] },
-    { name: "Балтаси", loc: "Балтасях", reps: [{ ig: "zalyalieva_gelusa" }] },
+    { name: "Балтаси", loc: "Балтасях", reps: [{ name: "Гелюся", ig: "zalyalieva_gelusa", phone: "79600455883" }] },
     { name: "Белебей", loc: "Белебее", reps: [{ name: "Регина", ig: "vitgrass_tmz", phone: "79874765333" }] },
-    { name: "Богатые Сабы", loc: "Богатых Сабах", reps: [{ ig: "zalyalieva_gelusa" }] },
+    { name: "Богатые Сабы", loc: "Богатых Сабах", reps: [{ name: "Гелюся", ig: "zalyalieva_gelusa", phone: "79600455883" }] },
     { name: "Бугульма", loc: "Бугульме", reps: [{ name: "Люция", ig: "vitgrass_bugulma", phone: "79172420676" }] },
-    { name: "Вятские Поляны", loc: "Вятских Полянах", reps: [{ ig: "zalyalieva_gelusa" }] },
+    { name: "Вятские Поляны", loc: "Вятских Полянах", reps: [{ name: "Гелюся", ig: "zalyalieva_gelusa", phone: "79600455883" }] },
     { name: "Димитровград", loc: "Димитровграде", reps: [{ name: "Эльвира", ig: "vitgrass_dimitrovgrad", phone: "79020046546" }] },
     { name: "Елабуга", loc: "Елабуге", reps: [{ name: "Резеда", ig: "vitgrass_elb", phone: "79274888982" }, { name: "Лейсан", ig: "morkovka_eco_market", phone: "79033184826" }] },
     { name: "Заинск", loc: "Заинске", reps: [{ name: "Алсу", ig: "vitgrass_zainsk", phone: "79656118266" }] },
     { name: "Казань", loc: "Казани", reps: [{ name: "Айгуль", ig: "vitgrass_kzn", phone: "79272457778" }, { name: "Эльмира", ig: "vitgrass_kazan_nurlat", phone: "79053711104" }, { name: "Гузель", ig: "pro_vitgrass", phone: "79276766003" }, { name: "Лариса", ig: "rasvet_kzn", phone: "79376186753" }, { name: "Алина", ig: "izuminka_v_kzn", phone: "79520327179" }] },
-    { name: "Кукмор", loc: "Кукморе", reps: [{ ig: "zalyalieva_gelusa" }] },
+    { name: "Кукмор", loc: "Кукморе", reps: [{ name: "Гелюся", ig: "zalyalieva_gelusa", phone: "79600455883" }] },
     { name: "Лениногорск", loc: "Лениногорске", reps: [{ ig: "vitgrass_leninogorsk", phone: "79172420676" }] },
     { name: "Москва", loc: "Москве", reps: [{ name: "Анастасия", ig: "moscow.vitgrass", phone: "79872218777" }, { name: "Анастасия", ig: "greenliverussia", phone: "79139878776" }, { name: "Алина", ig: "izuminka_v_kzn", phone: "79520327179" }] },
     { name: "Набережные Челны", loc: "Набережных Челнах", reps: [{ ig: "ecobrusnika_nch", phone: "79600470749" }] },
