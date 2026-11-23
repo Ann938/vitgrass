@@ -1283,7 +1283,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   box-shadow: 0 u(12) u(48) rgba(20, 41, 23, 0.2);
   outline: none;
   animation: repUp 0.35s var(--ease);
-  &[data-one] { width: u(540); padding-top: u(30); }
+  &[data-one] { width: u(520); .repGrid { grid-template-columns: minmax(0, 1fr); } }
 }
 .repHandle { display: none; }
 .repHead {
@@ -1344,7 +1344,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   border-radius: u(20);
   background: #f4f7f1;
 }
-.repWho { display: flex; align-items: center; gap: u(12); min-width: 0; > div { min-width: 0; } }
+.repWho { display: flex; align-items: center; gap: u(12); min-width: 0; padding: u(2) u(4) 0; > div { min-width: 0; } }
 .repWho .repName, .repWho .repSub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .repChips { display: flex; flex-wrap: wrap; gap: u(8); }
 .repChip {

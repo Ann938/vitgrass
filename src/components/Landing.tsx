@@ -510,8 +510,8 @@ function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
 
 // ---------- попап «Представители в …» (макет 544:667) ----------
 // Связь — MAX и звонок (Instagram из способов связи убран 23.11, ник остаётся подписью).
-// Один представитель — «Заказать в …»: крупная карточка и кнопки-строки;
-// несколько — карточки с кнопками-чипами (ДВ — две колонки). На МВ — нижняя панель.
+// Один представитель — «Заказать в …», несколько — «Представители в …»; карточки одинаковые,
+// мессенджеры в ряд (ДВ — две колонки, у одного — одна). На МВ — нижняя панель.
 // Ссылки на чат MAX по номеру телефона нет — кнопка MAX копирует номер, его вставляют в поиск MAX.
 const tel = (p: string) => `tel:+${p}`;
 const fmt = (p: string) => `+${p[0]} ${p.slice(1, 4)} ${p.slice(4, 7)}-${p.slice(7, 9)}-${p.slice(9)}`;
@@ -564,80 +564,43 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
             <img src={src("/img/rep/close.svg")} alt="" width={20} height={20} />
           </button>
         </div>
-        {one ? (
-          <>
-            <div className={s.repBig}>
-              <Avatar r={one} />
-              <div>
-                <p className={s.repName}>{repTitle(one)}</p>
-                <p className={s.repSub}>{one.note || "Принимает заказы"}</p>
+        {/* и один, и несколько представителей — карточки с мессенджерами в ряд (макет 549:896) */}
+        <p className={s.repLead}>{one ? "Свяжитесь с представителем для заказа" : "Выберите, с кем связаться для заказа"}</p>
+        <div className={s.repGrid}>
+          {city.reps.map((r, k) => (
+            <div key={k} className={s.repCard}>
+              <div className={s.repWho}>
+                {/* фото пока нет — круг убран; появятся фото: <Avatar r={r} /> */}
+                <div>
+                  <p className={s.repName}>{repTitle(r)}</p>
+                  <p className={s.repSub}>{copied && copied === r.phone ? "Номер скопирован — найдите в MAX" : repSub(r)}</p>
+                </div>
               </div>
-            </div>
-            {(one.phone || one.vk) && <p className={s.repLead}>Выберите удобный способ связи</p>}
-            <div className={s.repRows}>
-              {one.phone && (
-                <button type="button" className={s.repRow} data-main="" onClick={() => copy(one.phone!)}>
-                  <img src={src("/img/rep/max-w.svg")} alt="" width={20} height={20} />
-                  <span>{copied === one.phone ? "Номер скопирован — найдите его в MAX" : "Написать в MAX"}</span>
-                  <img src={src("/img/rep/right-w.svg")} alt="" width={20} height={20} />
-                </button>
-              )}
-              {one.vk && (
-                <A href={one.vk} className={s.repRow}>
-                  <span className={s.repVk} aria-hidden="true">VK</span>
-                  <span>Написать во ВКонтакте</span>
-                  <img src={src("/img/rep/right.svg")} alt="" width={20} height={20} />
-                </A>
-              )}
-              {one.phone && (
-                <a href={tel(one.phone)} className={s.repRow}>
-                  <img src={src("/img/rep/call.svg")} alt="" width={24} height={24} />
-                  <span>Позвонить</span>
-                  <img src={src("/img/rep/right.svg")} alt="" width={20} height={20} />
-                </a>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            <p className={s.repLead}>Выберите, с кем связаться для заказа</p>
-            <div className={s.repGrid}>
-              {city.reps.map((r, k) => (
-                <div key={k} className={s.repCard}>
-                  <div className={s.repWho}>
-                    <Avatar r={r} />
-                    <div>
-                      <p className={s.repName}>{repTitle(r)}</p>
-                      <p className={s.repSub}>{copied && copied === r.phone ? "Номер скопирован — найдите в MAX" : repSub(r)}</p>
-                    </div>
-                  </div>
-                  {(r.phone || r.vk) && (
-                    <div className={s.repChips}>
-                      {r.phone && (
-                        <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
-                          <img src={src("/img/rep/max.svg")} alt="" width={18} height={18} />
-                          MAX
-                        </button>
-                      )}
-                      {r.vk && (
-                        <A href={r.vk} className={s.repChip}>
-                          <span className={s.repVk} aria-hidden="true">VK</span>
-                          ВКонтакте
-                        </A>
-                      )}
-                      {r.phone && (
-                        <a href={tel(r.phone)} className={s.repChip}>
-                          <img src={src("/img/rep/call.svg")} alt="" width={24} height={24} />
-                          Звонок
-                        </a>
-                      )}
-                    </div>
+              {(r.phone || r.vk) && (
+                <div className={s.repChips}>
+                  {r.phone && (
+                    <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
+                      <img src={src("/img/rep/max.svg")} alt="" width={18} height={18} />
+                      MAX
+                    </button>
+                  )}
+                  {r.vk && (
+                    <A href={r.vk} className={s.repChip}>
+                      <span className={s.repVk} aria-hidden="true">VK</span>
+                      ВКонтакте
+                    </A>
+                  )}
+                  {r.phone && (
+                    <a href={tel(r.phone)} className={s.repChip}>
+                      <img src={src("/img/rep/call.svg")} alt="" width={24} height={24} />
+                      Звонок
+                    </a>
                   )}
                 </div>
-              ))}
+              )}
             </div>
-          </>
-        )}
+          ))}
+        </div>
       </div>
     </div>
   );
