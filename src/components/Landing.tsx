@@ -951,11 +951,13 @@ function useReveal() {
   }, []);
 }
 
-export default function Landing({ brand = "" }: { brand?: "" | "bodai" }) {
+// bg — тестовый фон страницы (капли росы / колоски), только на тестовых страницах /test-dew и /test-wheat
+export default function Landing({ brand = "", bg }: { brand?: "" | "bodai"; bg?: "dew" | "wheat" }) {
   useReveal();
   return (
     <Brand.Provider value={brand}>
     <div className={brand === "bodai" ? s.bodai : undefined} style={brand ? undefined : { display: "contents" }}>
+      {bg && <div className={s.bgLayer} data-bg={bg} aria-hidden="true" />}
       <Header />
       <main>
         <Hero />

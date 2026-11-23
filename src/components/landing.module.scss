@@ -1587,6 +1587,18 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   }
 }
 
+// ---------- тест: фон страницы с каплями росы / колосками (/test-dew, /test-wheat) ----------
+// слой под всем содержимым: виден только на сером фоне между карточками
+.bgLayer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: repeat;
+  &[data-bg="dew"] { background-image: url("../../public/img/bg/dew.svg"); background-size: u(560) u(560); }
+  &[data-bg="wheat"] { background-image: url("../../public/img/bg/wheat.svg"); background-size: u(640) u(640); }
+}
+
 // ---------- Вариант BODAI (/bodai): палитра и логотип из гайдлайна BODAI ----------
 // display: contents — обёртка не влияет на раскладку, только задаёт переменные
 .bodai {

@@ -229,7 +229,6 @@ export const cities = {
     { name: "Нурлат", loc: "Нурлате", reps: [{ name: "Ольга", ig: "vitgrass_nurlat", phone: "79375713530" }, { ig: "vitgrass_kazan_nurlat" }] },
     { name: "Октябрьский", loc: "Октябрьском", reps: [{ name: "Юля", ig: "vitgrass_okt", phone: "79174092689" }] },
     { name: "Оренбург", loc: "Оренбурге", reps: [{ name: "Кристина", ig: "kris.vitgrass.oren", phone: "79022488885" }, { name: "Ольга", ig: "tumanova_vitgrass", phone: "79878954205" }] },
-    { name: "Пестрецы", loc: "Пестрецах", reps: [{ ig: "body.lounge.gimadeeva" }] },
     { name: "Самара", loc: "Самаре", reps: [{ name: "Эльвира", ig: "vitgrass_samara", phone: "79198095200" }, { ig: "alexsandra_matyushkina", phone: "79272064642" }] },
     { name: "Санкт-Петербург", loc: "Санкт-Петербурге", reps: [{ ig: "greenliverussia", phone: "79139878776" }] },
     { name: "Сарманово", loc: "Сарманово", reps: [{ name: "Дания", ig: "vitgrass_sarmanovo", phone: "79172519101" }] },
