@@ -51,6 +51,18 @@ const email = git(["config", "user.email"]);
 const dir = mkdtempSync(join(tmpdir(), "vitgrass-pages-"));
 try {
   cpSync("out", dir, { recursive: true });
+  // Старые скрипты (_next/static) из прошлой публикации оставляем: GitHub Pages разрешает
+  // браузеру 10 минут держать HTML в кэше, и старая страница ссылается на прежние чанки —
+  // если их удалить, сайт открывается без скриптов (кнопки и окна не работают).
+  const prev = mkdtempSync(join(tmpdir(), "vitgrass-prev-"));
+  try {
+    git(["clone", "-q", "--depth", "1", "-b", "gh-pages", remote, prev]);
+    if (existsSync(join(prev, "_next/static"))) cpSync(join(prev, "_next/static"), join(dir, "_next/static"), { recursive: true, force: false });
+  } catch {
+    console.log("прошлая публикация не найдена — старые чанки не переносим");
+  } finally {
+    rmSync(prev, { recursive: true, force: true });
+  }
   git(["init", "-q", "-b", "gh-pages"], dir);
   git(["config", "user.name", name], dir);
   git(["config", "user.email", email], dir);
