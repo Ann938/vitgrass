@@ -18,7 +18,7 @@ import {
   type Rep,
 } from "@/content";
 import s from "./landing.module.scss";
-import { callIcon, closeWhiteIcon, maxWhiteIcon } from "./repIcons";
+import { callIcon, closeWhiteIcon, maxIcon } from "./repIcons";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const src = (p: string) => (p.startsWith("/") ? base + p : p);
@@ -630,18 +630,18 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
               {(r.phone || r.vk) && (
                 <div className={s.repChips}>
                   {r.phone && (
-                    <button type="button" className={s.repChip} data-main="" onClick={() => copy(r.phone!)}>
-                      <img src={maxWhiteIcon} alt="" width={18} height={18} />
+                    <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
+                      <img src={maxIcon} alt="" width={18} height={18} />
                       MAX
                     </button>
                   )}
                   {r.vk && (
-                    <A href={r.vk} className={s.repChip} data-main="">
+                    <A href={r.vk} className={s.repChip}>
                       ВКонтакте
                     </A>
                   )}
                   {r.phone && (
-                    <a href={tel(r.phone)} className={s.repChip}>
+                    <a href={tel(r.phone)} className={s.repChip} data-main="">
                       <img src={callIcon} alt="" width={24} height={24} />
                       Звонок
                     </a>
