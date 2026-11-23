@@ -509,12 +509,12 @@ function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
 }
 
 // ---------- попап «Представители в …» (макет 544:667) ----------
-// Один представитель — «Заказать в …»: крупная карточка и три кнопки-строки;
+// Связь — MAX и звонок (Instagram из способов связи убран 23.11, ник остаётся подписью).
+// Один представитель — «Заказать в …»: крупная карточка и кнопки-строки;
 // несколько — карточки с кнопками-чипами (ДВ — две колонки). На МВ — нижняя панель.
 // Ссылки на чат MAX по номеру телефона нет — кнопка MAX копирует номер, его вставляют в поиск MAX.
 const tel = (p: string) => `tel:+${p}`;
 const fmt = (p: string) => `+${p[0]} ${p.slice(1, 4)} ${p.slice(4, 7)}-${p.slice(7, 9)}-${p.slice(9)}`;
-const igUrl = (n: string) => `https://www.instagram.com/${n}/`;
 const repTitle = (r: Rep) => r.name || (r.ig ? `@${r.ig}` : "Представитель");
 const repSub = (r: Rep) => r.note || (r.name && r.ig ? `@${r.ig}` : r.phone ? fmt(r.phone) : "Принимает заказы");
 const initials = (r: Rep) => (r.name || r.ig || "В").replace(/[^A-Za-zА-Яа-яЁё]/g, "").slice(0, 1).toUpperCase();
@@ -573,7 +573,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                 <p className={s.repSub}>{one.note || "Принимает заказы"}</p>
               </div>
             </div>
-            {(one.phone || one.ig || one.vk) && <p className={s.repLead}>Выберите удобный способ связи</p>}
+            {(one.phone || one.vk) && <p className={s.repLead}>Выберите удобный способ связи</p>}
             <div className={s.repRows}>
               {one.phone && (
                 <button type="button" className={s.repRow} data-main="" onClick={() => copy(one.phone!)}>
@@ -581,13 +581,6 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                   <span>{copied === one.phone ? "Номер скопирован — найдите его в MAX" : "Написать в MAX"}</span>
                   <img src={src("/img/rep/right-w.svg")} alt="" width={20} height={20} />
                 </button>
-              )}
-              {one.ig && (
-                <A href={igUrl(one.ig)} className={s.repRow}>
-                  <img src={src("/img/rep/ig-16.svg")} alt="" width={20} height={20} />
-                  <span>Написать в Instagram</span>
-                  <img src={src("/img/rep/right.svg")} alt="" width={20} height={20} />
-                </A>
               )}
               {one.vk && (
                 <A href={one.vk} className={s.repRow}>
@@ -618,19 +611,13 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                       <p className={s.repSub}>{copied && copied === r.phone ? "Номер скопирован — найдите в MAX" : repSub(r)}</p>
                     </div>
                   </div>
-                  {(r.phone || r.ig || r.vk) && (
+                  {(r.phone || r.vk) && (
                     <div className={s.repChips}>
                       {r.phone && (
                         <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
                           <img src={src("/img/rep/max.svg")} alt="" width={18} height={18} />
                           MAX
                         </button>
-                      )}
-                      {r.ig && (
-                        <A href={igUrl(r.ig)} className={s.repChip}>
-                          <img src={src("/img/rep/ig.svg")} alt="" width={18} height={18} />
-                          Instagram
-                        </A>
                       )}
                       {r.vk && (
                         <A href={r.vk} className={s.repChip}>
