@@ -212,7 +212,18 @@ function Hero() {
                     </T>
                   );
                 })()}
-                <p className={s.heroLead}>{sl.lead}</p>
+                <p className={s.heroLead}>
+                  {sl.lead.split("|").map((part, j) => (
+                    <span key={j}>
+                      {j > 0 && (
+                        <>
+                          <br className={s.onlyD} />{" "}
+                        </>
+                      )}
+                      {part}
+                    </span>
+                  ))}
+                </p>
               </div>
             ))}
           </div>
