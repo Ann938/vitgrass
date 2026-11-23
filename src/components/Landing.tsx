@@ -752,6 +752,28 @@ function Cities() {
     t = setTimeout(step, 1800);
     return () => clearTimeout(t);
   }, [focus, q]);
+  // пустой поиск в фокусе + начали прокручивать страницу → снимаем фокус (курсор не мигает зря).
+  // Запоминаем, где был фокус: на МВ клавиатура сама сдвигает страницу при фокусе — это не считаем.
+  const qRef = useRef(q);
+  qRef.current = q;
+  useEffect(() => {
+    let at = { y: 0, t: 0 };
+    const onFocus = (e: FocusEvent) => {
+      if ((e.target as HTMLElement)?.matches?.("#cities input[type=search]")) at = { y: scrollY, t: performance.now() };
+    };
+    const onScroll = () => {
+      const el = document.activeElement as HTMLInputElement | null;
+      if (!el?.matches?.("#cities input[type=search]") || qRef.current) return;
+      if (performance.now() - at.t < 600 || Math.abs(scrollY - at.y) < 60) return;
+      el.blur();
+    };
+    document.addEventListener("focusin", onFocus);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      document.removeEventListener("focusin", onFocus);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
   const query = q.trim().toLowerCase();
   const found = useMemo(() => (query ? shownCities.filter((c) => c.name.toLowerCase().includes(query)) : null), [query]);
   const reset = () => {
