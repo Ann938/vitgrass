@@ -91,8 +91,8 @@ export const products = {
     {
       tags: ["Для партнёров"],
       name: "Хотите представлять Витграсс в своём городе?",
-      img: "/img/p-partners.webp",
-      crop: { w: 119.61, h: 200.36, l: -9.39, t: -40.92 },
+      // исходник был круглым на белом — кадр достроен (небо сверху, края), все пятеро целиком
+      img: "/img/p-partners-full.webp",
       cta: "Узнать подробнее",
       href: links.partner,
       accent: true,

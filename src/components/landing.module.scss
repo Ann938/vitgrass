@@ -1578,14 +1578,10 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .productGrid > li:last-child:nth-child(3n + 2) {
     grid-column: span 2;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); // фото шире — кадр 816×730 почти без обрезки
     grid-template-rows: auto 1fr auto;
     column-gap: u(24);
-    .productImg { grid-row: 1 / -1; height: 100%; min-height: u(216); }
-    // кадрирование из макета рассчитано на узкую карточку — в широкой оно растягивало фото
-    // фото партнёров — круг на белом: увеличиваем так, чтобы рамка целиком была внутри круга
-    .productImg img[data-crop] { width: 155% !important; height: auto !important; aspect-ratio: 1; left: 50% !important; top: 50% !important; transform: translate(-50%, -47%); }
-    @include hover { .productImg img[data-crop] { transform: translate(-50%, -47%) scale(1.04); } }
+    .productImg { grid-row: 1 / -1; height: 100%; min-height: u(216); img { object-position: 50% 40%; } }
     .productText { grid-column: 2; padding-top: u(8); }
     .btnPrimary { grid-column: 2; grid-row: 3; }
   }

@@ -269,6 +269,10 @@ function Hero() {
 }
 
 // ---------- 02 · продукты ----------
+// кадрирование фото продукции из макета (поле crop в content.ts необязательное)
+type Crop = { crop?: { w: number; h: number; l: number; t: number } };
+const cropStyle = (c: Crop["crop"]) => (c ? { width: `${c.w}%`, height: `${c.h}%`, left: `${c.l}%`, top: `${c.t}%` } : undefined);
+
 function Products() {
   return (
     <section className={s.products} id="products">
@@ -283,8 +287,8 @@ function Products() {
                 src={src(p.img)}
                 alt={p.name.replace(/ /g, " ")}
                 loading="lazy"
-                data-crop={p.crop ? "" : undefined}
-                style={p.crop ? { width: `${p.crop.w}%`, height: `${p.crop.h}%`, left: `${p.crop.l}%`, top: `${p.crop.t}%` } : undefined}
+                data-crop={(p as Crop).crop ? "" : undefined}
+                style={cropStyle((p as Crop).crop)}
               />
             </div>
             <div className={s.productText}>
