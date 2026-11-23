@@ -889,9 +889,7 @@ function Footer() {
         <a href={links.phone} className={s.navLink}>
           {links.phoneText}
         </a>
-        <A href={links.instagram} className={s.navLink}>
-          {links.instagramText}
-        </A>
+        {/* Instagram из подвала убран 23.11 */}
       </nav>
     </footer>
   );
