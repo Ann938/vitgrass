@@ -1462,6 +1462,116 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .repLayer, .repBox, .repBox[data-one], .repCard { animation: none; }
 }
 
+// ---------- поиск городов на ДВ: поле справа от заголовка, ширина как у колонки ----------
+.citiesTop {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: u(40);
+}
+.searchClear {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: u(32);
+  height: u(32);
+  margin-right: u(-6);
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--heading);
+  cursor: pointer;
+  transition: background 0.2s;
+  svg { width: u(16); height: u(16); opacity: 1; }
+  @include hover { background: var(--soft); }
+}
+.cityCols[data-search] li { animation: itemIn 0.45s var(--ease) both; }
+.foundD { margin-top: u(-16); font-weight: 600; font-size: u(14); line-height: u(24); color: var(--muted); }
+.cityEmptyD { display: none; }
+@include desktop {
+  .search {
+    position: relative;
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: u(12);
+    width: u(412);
+    height: u(57);
+    padding-inline: u(24) u(16);
+    border-radius: u(24);
+    background: var(--card);
+    color: var(--heading);
+    border: u(1.5) solid transparent;
+    cursor: text;
+    transition: border-color 0.3s;
+    &:focus-within { border-color: var(--green); }
+    > svg { width: u(20); height: u(20); flex: none; opacity: 0.6; }
+    input {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      border: 0;
+      outline: 0;
+      background: none;
+      font: 500 u(18) / u(26) var(--font-sans), system-ui, sans-serif;
+      color: var(--heading);
+      -webkit-appearance: none;
+      appearance: none;
+      &::-webkit-search-cancel-button,
+      &::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+    }
+  }
+  .hint {
+    position: absolute;
+    left: u(56);
+    font: 500 u(18) / u(26) var(--font-sans), system-ui, sans-serif;
+    opacity: 0.5;
+    pointer-events: none;
+    white-space: pre;
+    &[data-typing]::after {
+      content: "";
+      display: inline-block;
+      width: u(1.5);
+      height: 1.1em;
+      margin-left: u(2);
+      vertical-align: -0.15em;
+      background: currentColor;
+      animation: caret 1s steps(1) infinite;
+    }
+  }
+  .cityEmptyD {
+    display: flex;
+    justify-content: center;
+    padding: u(40) u(24);
+    border-radius: u(24);
+    background: var(--card);
+  }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: u(8); text-align: center; }
+  .emptyTitle { font-weight: 700; font-size: u(22); line-height: u(30); color: var(--heading); }
+  .emptyText { font-weight: 500; font-size: u(16); line-height: u(24); color: var(--muted); }
+  .emptyReset {
+    margin-top: u(8);
+    height: u(44);
+    padding: 0 u(24);
+    border: 0;
+    border-radius: u(100);
+    background: var(--yellow);
+    font: 500 u(15) / 1 var(--font-btn), system-ui, sans-serif;
+    color: var(--btn-ink);
+    cursor: pointer;
+    transition: background 0.2s;
+    @include hover { background: #fff35c; }
+  }
+  // часто задаваемые вопросы — заголовок по центру, как у остальных блоков
+  .faq > .h2 { text-align: center; }
+}
+@include mobile {
+  .citiesTop { flex-direction: column; align-items: stretch; gap: u(24); }
+  .citiesTop > .search { display: none; }
+  .foundD { display: none; }
+  .searchClear { width: u(28); height: u(28); }
+}
+
 // ---------- Вариант BODAI (/bodai): палитра и логотип из гайдлайна BODAI ----------
 // display: contents — обёртка не влияет на раскладку, только задаёт переменные
 .bodai {

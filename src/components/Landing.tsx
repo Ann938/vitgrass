@@ -82,6 +82,12 @@ const Search = () => (
   </svg>
 );
 
+const Close = () => (
+  <svg viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M5 5l10 10M15 5 5 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+  </svg>
+);
+
 // вариант бренда: "" — как в макете, "bodai" — логотип и палитра из гайдлайна BODAI (/bodai)
 const Brand = createContext<"" | "bodai">("");
 
@@ -650,6 +656,58 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
   );
 }
 
+// поле поиска городов: на ДВ — справа от заголовка, на МВ — над списком
+function CitySearch(props: {
+  q: string;
+  setQ: (v: string) => void;
+  setFocus: (v: boolean) => void;
+  focus: boolean;
+  typed: string;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  className: string;
+}) {
+  const { q, setQ, setFocus, focus, typed, inputRef, className } = props;
+  return (
+    <label className={className} data-filled={q ? "" : undefined}>
+      <Search />
+      <input
+        ref={inputRef}
+        type="search"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        aria-label="Поиск города"
+        enterKeyHint="search"
+        autoComplete="off"
+      />
+      {!q && (
+        <span className={s.hint} data-typing={focus ? undefined : ""} aria-hidden="true">
+          {typed}
+        </span>
+      )}
+      {q && (
+        <button type="button" className={s.searchClear} onClick={() => setQ("")} aria-label="Очистить поиск">
+          <Close />
+        </button>
+      )}
+    </label>
+  );
+}
+
+// пустой результат поиска — общий для ДВ и МВ
+function CityEmpty({ onReset }: { onReset: () => void }) {
+  return (
+    <div className={s.empty}>
+      <p className={s.emptyTitle}>Город не найден</p>
+      <p className={s.emptyText}>Проверьте название города или&nbsp;измените запрос.</p>
+      <button type="button" className={s.emptyReset} onClick={onReset}>
+        Сбросить поиск
+      </button>
+    </div>
+  );
+}
+
 function Cities() {
   const [open, setOpen] = useState<City | null>(null);
   const close = useCallback(() => setOpen(null), []);
@@ -657,6 +715,7 @@ function Cities() {
   const [all, setAll] = useState(false);
   const [focus, setFocus] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const inputD = useRef<HTMLInputElement>(null);
   // подсказка «печатается»: город набирается по буквам, держится, стирается — и следующий.
   // При фокусе замирает на целом слове.
   const [typed, setTyped] = useState(cities.hints[0]);
@@ -695,50 +754,50 @@ function Cities() {
   const found = useMemo(() => (query ? shownCities.filter((c) => c.name.toLowerCase().includes(query)) : null), [query]);
   const reset = () => {
     setQ("");
-    input.current?.focus();
+    // фокус в то поле, которое сейчас видно (ДВ или МВ)
+    (inputD.current?.offsetParent ? inputD.current : input.current)?.focus();
   };
-  const per = Math.ceil(shownCities.length / 3);
-  const cols = [0, 1, 2].map((c) => shownCities.slice(c * per, c * per + per));
+  // ДВ: найденные города (или все) раскладываются в три колонки
+  const listD = found ?? shownCities;
+  const per = Math.max(1, Math.ceil(listD.length / 3));
+  const cols = [0, 1, 2].map((c) => listD.slice(c * per, c * per + per));
+  const searchProps = { q, setQ, setFocus, focus, typed };
 
   return (
     <section className={s.cities} id="cities">
-      <div className={s.citiesHead} data-reveal>
-        <h2 className={s.h2}>{cities.title}</h2>
-        <p>{cities.lead}</p>
+      <div className={s.citiesTop} data-reveal>
+      <div className={s.citiesHead}>
+          <h2 className={s.h2}>{cities.title}</h2>
+          <p>{cities.lead}</p>
+        </div>
+        <CitySearch {...searchProps} inputRef={inputD} className={s.search} />
       </div>
 
       {/* ДВ */}
-      <div className={s.cityCols}>
-        {cols.map((col, c) => (
-          <ul key={c} data-reveal style={d(c)}>
-            {col.map((c) => (
-              <CityItem key={c.name} city={c} onOpen={setOpen} />
-            ))}
-          </ul>
-        ))}
-      </div>
+      {found && !found.length ? (
+        <div className={s.cityEmptyD}>
+          <CityEmpty onReset={reset} />
+        </div>
+      ) : (
+        <div className={s.cityCols} data-search={found ? "" : undefined}>
+          {cols.map((col, c) =>
+            col.length ? (
+              <ul key={c + (found ? "f" : "")} data-reveal={found ? undefined : ""} style={d(c)}>
+                {col.map((c2) => (
+                  <CityItem key={c2.name} city={c2} onOpen={setOpen} />
+                ))}
+              </ul>
+            ) : (
+              <span key={c} />
+            ),
+          )}
+        </div>
+      )}
+      {found && found.length > 0 && <p className={s.foundD}>{plural(found.length)}</p>}
 
       {/* МВ */}
       <div className={s.cityM}>
-        <label className={s.search} data-filled={q ? "" : undefined}>
-          <Search />
-          <input
-            ref={input}
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            onFocus={() => setFocus(true)}
-            onBlur={() => setFocus(false)}
-            aria-label="Поиск города"
-            enterKeyHint="search"
-            autoComplete="off"
-          />
-          {!q && (
-            <span className={s.hint} data-typing={focus ? undefined : ""} aria-hidden="true">
-              {typed}
-            </span>
-          )}
-        </label>
+        <CitySearch {...searchProps} inputRef={input} className={s.search} />
 
         {found ? (
           found.length ? (
@@ -754,13 +813,7 @@ function Cities() {
               </button>
             </>
           ) : (
-            <div className={s.empty}>
-              <p className={s.emptyTitle}>Город не найден</p>
-              <p className={s.emptyText}>Проверьте название города или&nbsp;измените запрос.</p>
-              <button type="button" className={s.emptyReset} onClick={reset}>
-                Сбросить поиск
-              </button>
-            </div>
+            <CityEmpty onReset={reset} />
           )
         ) : (
           <>
@@ -911,10 +964,10 @@ export default function Landing({ brand = "" }: { brand?: "" | "bodai" }) {
         <Hero />
         <Products />
         <Compound />
-        <Reviews />
         <Advantages />
         <Cities />
         <Story />
+        <Reviews />
         <Faq />
         <Contacts />
       </main>
