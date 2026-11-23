@@ -1059,9 +1059,9 @@
     border-radius: u(16);
     background: var(--card);
     color: var(--heading);
-    border: u(1.5) solid transparent;
-    transition: border-color 0.3s;
-    &:focus-within { border-color: var(--green); }
+    border: 0;
+    transition: box-shadow 0.25s var(--ease);
+    &:focus-within { box-shadow: inset 0 0 0 2px var(--green); }
     svg { width: u(20); height: u(20); flex: none; opacity: 0.6; }
     input {
       flex: 1;
@@ -1462,13 +1462,11 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .repLayer, .repBox, .repBox[data-one], .repCard { animation: none; }
 }
 
-// ---------- поиск городов на ДВ: поле справа от заголовка, ширина как у колонки ----------
-// временные варианты для сравнения: b — поле во всю ширину под заголовком, c — под заголовком шириной в колонку
+// ---------- поиск городов на ДВ: поле во всю ширину под заголовком (выбор Ани, вариант B) ----------
 .citiesTop {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: u(40);
+  flex-direction: column;
+  gap: u(24);
 }
 .searchClear {
   flex: none;
@@ -1496,16 +1494,16 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
     display: flex;
     align-items: center;
     gap: u(12);
-    width: u(412);
+    width: 100%;
     height: u(57);
     padding-inline: u(24) u(16);
     border-radius: u(24);
     background: var(--card);
     color: var(--heading);
-    border: u(1.5) solid transparent;
+    border: 0;
     cursor: text;
-    transition: border-color 0.3s;
-    &:focus-within { border-color: var(--green); }
+    transition: box-shadow 0.25s var(--ease);
+    &:focus-within { box-shadow: inset 0 0 0 2px var(--green); }
     > svg { width: u(20); height: u(20); flex: none; opacity: 0.6; }
     input {
       flex: 1;
@@ -1563,12 +1561,6 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
     transition: background 0.2s;
     @include hover { background: #fff35c; }
   }
-  .cities[data-search-layout="b"],
-  .cities[data-search-layout="c"] {
-    .citiesTop { flex-direction: column; align-items: stretch; gap: u(24); }
-  }
-  .cities[data-search-layout="b"] .citiesTop > .search { width: 100%; }
-  .cities[data-search-layout="c"] .citiesTop > .search { align-self: flex-start; }
   // часто задаваемые вопросы — заголовок по центру, как у остальных блоков
   .faq > .h2 { text-align: center; }
 }

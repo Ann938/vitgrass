@@ -713,12 +713,6 @@ function CityEmpty({ onReset }: { onReset: () => void }) {
 function Cities() {
   const [open, setOpen] = useState<City | null>(null);
   const close = useCallback(() => setOpen(null), []);
-  // временно: варианты расположения поиска на ДВ для сравнения (?search=a|b|c)
-  const [layout, setLayout] = useState("a");
-  useEffect(() => {
-    const v = new URLSearchParams(location.search).get("search");
-    if (v === "b" || v === "c") setLayout(v);
-  }, []);
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
   const [focus, setFocus] = useState(false);
@@ -772,7 +766,7 @@ function Cities() {
   const searchProps = { q, setQ, setFocus, focus, typed };
 
   return (
-    <section className={s.cities} id="cities" data-search-layout={layout}>
+    <section className={s.cities} id="cities">
       <div className={s.citiesTop} data-reveal>
       <div className={s.citiesHead}>
           <h2 className={s.h2}>{cities.title}</h2>
