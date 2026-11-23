@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
   advantages,
   cities,
@@ -79,7 +79,17 @@ const Search = () => (
   </svg>
 );
 
-function Logo({ className }: { className?: string }) {
+// вариант бренда: "" — как в макете, "bodai" — логотип и палитра из гайдлайна BODAI (/bodai)
+const Brand = createContext<"" | "bodai">("");
+
+function Logo({ className, foot }: { className?: string; foot?: boolean }) {
+  const brand = useContext(Brand);
+  if (brand === "bodai")
+    return (
+      <a href="#top" className={className} aria-label="BODAI — на главную">
+        <img src={src(foot ? "/img/bodai/name-desc.png" : "/img/bodai/name.png")} alt="BODAI" width={foot ? 170 : 150} height={foot ? 56 : 38} />
+      </a>
+    );
   return (
     <a href="#top" className={className} aria-label="Alina Boginia — на главную">
       <img src={src("/img/logo.png")} alt="Alina Boginia" width={90} height={80} />
@@ -714,7 +724,7 @@ function Contacts() {
 function Footer() {
   return (
     <footer className={s.footer}>
-      <Logo className={s.logo} />
+      <Logo className={s.logo} foot />
       <nav className={s.footNav} aria-label="Контакты">
         <a href={links.phone} className={s.navLink}>
           {links.phoneText}
@@ -745,10 +755,11 @@ function useReveal() {
   }, []);
 }
 
-export default function Landing() {
+export default function Landing({ brand = "" }: { brand?: "" | "bodai" }) {
   useReveal();
   return (
-    <>
+    <Brand.Provider value={brand}>
+    <div className={brand === "bodai" ? s.bodai : undefined} style={brand ? undefined : { display: "contents" }}>
       <Header />
       <main>
         <Hero />
@@ -762,6 +773,7 @@ export default function Landing() {
         <Contacts />
       </main>
       <Footer />
-    </>
+    </div>
+    </Brand.Provider>
   );
 }
