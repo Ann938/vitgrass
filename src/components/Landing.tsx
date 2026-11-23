@@ -665,8 +665,9 @@ function CitySearch(props: {
   typed: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
   className: string;
+  count?: number;
 }) {
-  const { q, setQ, setFocus, focus, typed, inputRef, className } = props;
+  const { q, setQ, setFocus, focus, typed, inputRef, className, count } = props;
   return (
     <label className={className} data-filled={q ? "" : undefined}>
       <Search />
@@ -686,6 +687,7 @@ function CitySearch(props: {
           {typed}
         </span>
       )}
+      {q && count !== undefined && count > 0 && <span className={s.searchCount}>{plural(count)}</span>}
       {q && (
         <button type="button" className={s.searchClear} onClick={() => setQ("")} aria-label="Очистить поиск">
           <Close />
@@ -711,6 +713,12 @@ function CityEmpty({ onReset }: { onReset: () => void }) {
 function Cities() {
   const [open, setOpen] = useState<City | null>(null);
   const close = useCallback(() => setOpen(null), []);
+  // временно: варианты расположения поиска на ДВ для сравнения (?search=a|b|c)
+  const [layout, setLayout] = useState("a");
+  useEffect(() => {
+    const v = new URLSearchParams(location.search).get("search");
+    if (v === "b" || v === "c") setLayout(v);
+  }, []);
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
   const [focus, setFocus] = useState(false);
@@ -764,36 +772,31 @@ function Cities() {
   const searchProps = { q, setQ, setFocus, focus, typed };
 
   return (
-    <section className={s.cities} id="cities">
+    <section className={s.cities} id="cities" data-search-layout={layout}>
       <div className={s.citiesTop} data-reveal>
       <div className={s.citiesHead}>
           <h2 className={s.h2}>{cities.title}</h2>
           <p>{cities.lead}</p>
         </div>
-        <CitySearch {...searchProps} inputRef={inputD} className={s.search} />
+        <CitySearch {...searchProps} inputRef={inputD} className={s.search} count={found?.length} />
       </div>
 
-      {/* ДВ */}
-      {found && !found.length ? (
+      {/* ДВ: колонки всегда в DOM (с постоянными ключами) — при пересоздании data-reveal
+          снова прятал бы их, и после очистки поиска города пропадали */}
+      {found && !found.length && (
         <div className={s.cityEmptyD}>
           <CityEmpty onReset={reset} />
         </div>
-      ) : (
-        <div className={s.cityCols} data-search={found ? "" : undefined}>
-          {cols.map((col, c) =>
-            col.length ? (
-              <ul key={c + (found ? "f" : "")} data-reveal={found ? undefined : ""} style={d(c)}>
-                {col.map((c2) => (
-                  <CityItem key={c2.name} city={c2} onOpen={setOpen} />
-                ))}
-              </ul>
-            ) : (
-              <span key={c} />
-            ),
-          )}
-        </div>
       )}
-      {found && found.length > 0 && <p className={s.foundD}>{plural(found.length)}</p>}
+      <div className={s.cityCols} data-search={found ? "" : undefined} style={found && !found.length ? { display: "none" } : undefined}>
+        {cols.map((col, c) => (
+          <ul key={c} data-reveal="" style={d(c)}>
+            {col.map((c2) => (
+              <CityItem key={c2.name} city={c2} onOpen={setOpen} />
+            ))}
+          </ul>
+        ))}
+      </div>
 
       {/* МВ */}
       <div className={s.cityM}>

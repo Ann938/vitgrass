@@ -1463,6 +1463,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 }
 
 // ---------- поиск городов на ДВ: поле справа от заголовка, ширина как у колонки ----------
+// временные варианты для сравнения: b — поле во всю ширину под заголовком, c — под заголовком шириной в колонку
 .citiesTop {
   display: flex;
   align-items: flex-end;
@@ -1486,7 +1487,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   @include hover { background: var(--soft); }
 }
 .cityCols[data-search] li { animation: itemIn 0.45s var(--ease) both; }
-.foundD { margin-top: u(-16); font-weight: 600; font-size: u(14); line-height: u(24); color: var(--muted); }
+.searchCount { flex: none; font-weight: 500; font-size: u(14); line-height: u(20); color: var(--muted); white-space: nowrap; }
 .cityEmptyD { display: none; }
 @include desktop {
   .search {
@@ -1562,13 +1563,18 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
     transition: background 0.2s;
     @include hover { background: #fff35c; }
   }
+  .cities[data-search-layout="b"],
+  .cities[data-search-layout="c"] {
+    .citiesTop { flex-direction: column; align-items: stretch; gap: u(24); }
+  }
+  .cities[data-search-layout="b"] .citiesTop > .search { width: 100%; }
+  .cities[data-search-layout="c"] .citiesTop > .search { align-self: flex-start; }
   // часто задаваемые вопросы — заголовок по центру, как у остальных блоков
   .faq > .h2 { text-align: center; }
 }
 @include mobile {
   .citiesTop { flex-direction: column; align-items: stretch; gap: u(24); }
   .citiesTop > .search { display: none; }
-  .foundD { display: none; }
   .searchClear { width: u(28); height: u(28); }
 }
 
