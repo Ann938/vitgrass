@@ -18,6 +18,7 @@ import {
   type Rep,
 } from "@/content";
 import s from "./landing.module.scss";
+import { callIcon, closeIcon, maxIcon } from "./repIcons";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const src = (p: string) => (p.startsWith("/") ? base + p : p);
@@ -561,7 +562,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
         <div className={s.repHead}>
           <h3>{title}</h3>
           <button type="button" className={s.repClose} onClick={onClose} aria-label="Закрыть">
-            <img src={src("/img/rep/close.svg")} alt="" width={20} height={20} />
+            <img src={closeIcon} alt="" width={20} height={20} />
           </button>
         </div>
         {/* и один, и несколько представителей — карточки с мессенджерами в ряд (макет 549:896) */}
@@ -580,7 +581,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                 <div className={s.repChips}>
                   {r.phone && (
                     <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
-                      <img src={src("/img/rep/max.svg")} alt="" width={18} height={18} />
+                      <img src={maxIcon} alt="" width={18} height={18} />
                       MAX
                     </button>
                   )}
@@ -592,7 +593,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                   )}
                   {r.phone && (
                     <a href={tel(r.phone)} className={s.repChip}>
-                      <img src={src("/img/rep/call.svg")} alt="" width={24} height={24} />
+                      <img src={callIcon} alt="" width={24} height={24} />
                       Звонок
                     </a>
                   )}
