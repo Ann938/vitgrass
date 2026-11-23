@@ -18,7 +18,7 @@ import {
   type Rep,
 } from "@/content";
 import s from "./landing.module.scss";
-import { callIcon, closeIcon, maxIcon } from "./repIcons";
+import { callIcon, closeWhiteIcon, maxWhiteIcon } from "./repIcons";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const src = (p: string) => (p.startsWith("/") ? base + p : p);
@@ -217,13 +217,21 @@ function Hero() {
             ))}
           </div>
           <div className={s.heroBtns}>
-            <a href="#products" className={s.btnSecondary} data-label={hero.order}>
-              {hero.order}
+            <a
+              href={slides[i].cta.href}
+              className={s.btnSecondary}
+              data-label={slides[i].cta.label}
+              onClick={slides[i].cta.href === "#cities" ? flashCities : undefined}
+            >
+              {slides[i].cta.label}
             </a>
             <A href={links.consult} className={s.btnOutline}>
               {hero.consult}
             </A>
           </div>
+          <p key={i} className={s.heroHint}>
+            {slides[i].cta.hint}
+          </p>
         </div>
         <div className={s.carousel}>
           <p className={s.counter} aria-live="polite">
@@ -498,11 +506,19 @@ function Advantages() {
 const DEFAULT_COUNT = 5;
 const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "Найден" : "Найдено") + ` ${n} ` + (n % 10 === 1 && n % 100 !== 11 ? "город" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "города" : "городов");
 
+// «Выбрать город» на первом экране: после прокрутки список ненадолго подсвечивается
+const flashCities = () => window.dispatchEvent(new Event("cities:flash"));
+
 function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
   return (
     <li>
       <button type="button" className={s.item} onClick={() => onOpen(city)}>
         <span>{city.name}</span>
+        {!city.reps.length && (
+          <i className={s.pending} title="Контакты уточняются" aria-label="контакты уточняются">
+            !
+          </i>
+        )}
         <Chevron />
       </button>
     </li>
@@ -518,10 +534,11 @@ const tel = (p: string) => `tel:+${p}`;
 const fmt = (p: string) => `+${p[0]} ${p.slice(1, 4)} ${p.slice(4, 7)}-${p.slice(7, 9)}-${p.slice(9)}`;
 const repTitle = (r: Rep) => r.name || "Представитель";
 const repSub = (r: Rep) => r.note || (r.phone ? fmt(r.phone) : "Принимает заказы");
-// Instagram не показываем совсем (ни кнопкой, ни @ником). Представители только с Instagram скрыты,
-// города, где никого не осталось, — тоже (данные в content.ts сохранены — вернуть, когда будут телефоны).
+// Instagram не показываем совсем (ни кнопкой, ни @ником). Представители только с Instagram скрыты
+// (данные в content.ts сохранены — вернуть, когда будут телефоны).
 const hasContact = (r: Rep) => !!(r.phone || r.vk || r.note);
-const shownCities = cities.items.map((c) => ({ ...c, reps: c.reps.filter(hasContact) })).filter((c) => c.reps.length);
+// города без контактов остаются в списке со знаком «!» — в окне предлагаем написать Алине
+const shownCities = cities.items.map((c) => ({ ...c, reps: c.reps.filter(hasContact) }));
 const initials = (r: Rep) => (r.name || r.ig || "В").replace(/[^A-Za-zА-Яа-яЁё]/g, "").slice(0, 1).toUpperCase();
 
 function Avatar({ r }: { r: Rep }) {
@@ -557,23 +574,42 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
       window.removeEventListener("keydown", esc);
     };
   }, [onClose]);
-  const one = city.reps.length === 1 ? city.reps[0] : null;
-  const title = one ? `Заказать в ${city.loc}` : `Представители в ${city.loc}`;
+  const n = city.reps.length;
+  const title = n > 1 ? `Представители в ${city.loc}` : `Заказать в ${city.loc}`;
+  const lead = !n ? "Контакты представителя уточняются" : n > 1 ? "Выберите, с кем связаться для заказа" : "Свяжитесь с представителем для заказа";
   return (
     <div className={s.repLayer} onClick={onClose}>
-      <div ref={box} className={s.repBox} data-one={one ? "" : undefined} role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
-        <span className={s.repHandle} aria-hidden="true" />
-        <div className={s.repHead}>
-          <h3>{title}</h3>
-          <button type="button" className={s.repClose} onClick={onClose} aria-label="Закрыть">
-            <img src={closeIcon} alt="" width={20} height={20} />
-          </button>
+      <div ref={box} className={s.repBox} data-one={n > 1 ? undefined : ""} role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
+        {/* шапка — как блок «Стать партнёром»: фото травы под затемнением */}
+        <div className={s.repTop}>
+          <img src={src("/img/reviews-bg.webp")} alt="" aria-hidden="true" />
+          <span className={s.repHandle} aria-hidden="true" />
+          <div className={s.repHead}>
+            <h3>{title}</h3>
+            <button type="button" className={s.repClose} onClick={onClose} aria-label="Закрыть">
+              <img src={closeWhiteIcon} alt="" width={20} height={20} />
+            </button>
+          </div>
+          <p className={s.repLead}>{lead}</p>
         </div>
-        {/* и один, и несколько представителей — карточки с мессенджерами в ряд (макет 549:896) */}
-        <p className={s.repLead}>{one ? "Свяжитесь с представителем для заказа" : "Выберите, с кем связаться для заказа"}</p>
         <div className={s.repGrid}>
+          {!n && (
+            <div className={s.repCard} style={d(0)}>
+              <div className={s.repWho}>
+                <div>
+                  <p className={s.repName}>Скоро появятся</p>
+                  <p className={s.repSub}>Пока напишите Алине — она подскажет, где купить сок в вашем городе.</p>
+                </div>
+              </div>
+              <div className={s.repChips}>
+                <A href={links.consult} className={s.repChip} data-main="">
+                  Написать Алине
+                </A>
+              </div>
+            </div>
+          )}
           {city.reps.map((r, k) => (
-            <div key={k} className={s.repCard}>
+            <div key={k} className={s.repCard} style={d(k)}>
               <div className={s.repWho}>
                 {/* фото пока нет — круг убран; появятся фото: <Avatar r={r} /> */}
                 <div>
@@ -584,13 +620,13 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
               {(r.phone || r.vk) && (
                 <div className={s.repChips}>
                   {r.phone && (
-                    <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
-                      <img src={maxIcon} alt="" width={18} height={18} />
+                    <button type="button" className={s.repChip} data-main="" onClick={() => copy(r.phone!)}>
+                      <img src={maxWhiteIcon} alt="" width={18} height={18} />
                       MAX
                     </button>
                   )}
                   {r.vk && (
-                    <A href={r.vk} className={s.repChip}>
+                    <A href={r.vk} className={s.repChip} data-main="">
                       <span className={s.repVk} aria-hidden="true">VK</span>
                       ВКонтакте
                     </A>
@@ -613,6 +649,21 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
 
 function Cities() {
   const [open, setOpen] = useState<City | null>(null);
+  const [flash, setFlash] = useState(false);
+  useEffect(() => {
+    let tm: ReturnType<typeof setTimeout>;
+    const on = () => {
+      setFlash(false);
+      requestAnimationFrame(() => setFlash(true));
+      clearTimeout(tm);
+      tm = setTimeout(() => setFlash(false), 2600);
+    };
+    window.addEventListener("cities:flash", on);
+    return () => {
+      window.removeEventListener("cities:flash", on);
+      clearTimeout(tm);
+    };
+  }, []);
   const close = useCallback(() => setOpen(null), []);
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
@@ -662,7 +713,7 @@ function Cities() {
   const cols = [0, 1, 2].map((c) => shownCities.slice(c * per, c * per + per));
 
   return (
-    <section className={s.cities} id="cities">
+    <section className={s.cities} id="cities" data-flash={flash || undefined}>
       <div className={s.citiesHead} data-reveal>
         <h2 className={s.h2}>{cities.title}</h2>
         <p>{cities.lead}</p>

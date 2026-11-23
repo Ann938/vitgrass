@@ -38,6 +38,8 @@ export const slides = [
     posterMobile: "/img/hero-1-m.webp",
     video: "/video/hero-1.mp4",
     videoMobile: "/video/hero-1-m.mp4",
+    // главная кнопка слайда: сок продают представители — ведём к выбору города
+    cta: { label: "Выбрать город", href: "#cities", hint: "Сок привозят представители — найдите свой город" },
   },
   {
     title: "Цельнозерновая мука с наших полей",
@@ -47,6 +49,8 @@ export const slides = [
     posterMobile: "/img/hero-2-m.webp",
     video: "/video/hero-2.mp4",
     videoMobile: "/video/hero-2-m.mp4",
+    // мука продаётся на Ozon, сортов два — ведём к карточкам муки
+    cta: { label: "Купить на Ozon", href: "#products", hint: "Доставка по всей России через Ozon" },
   },
 ];
 export const hero = { order: "Оформить заказ", consult: "Бесплатная консультация" };

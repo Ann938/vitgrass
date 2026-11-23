@@ -1257,9 +1257,37 @@
   .heart img { animation: none; }
 }
 
-// ---------- попап с представителями (макет 544:667) ----------
+// ---------- попап с представителями (макет 544:667, оформлен под стиль сайта) ----------
 // город в списке — кнопка, внешне как прежняя ссылка
 button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: pointer; color: inherit; }
+// «!» — у города пока нет контактов
+.pending {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: u(22);
+  height: u(22);
+  border-radius: 50%;
+  background: var(--yellow);
+  font: 700 u(14) / 1 var(--font-sans), system-ui, sans-serif;
+  font-style: normal;
+  color: var(--heading);
+}
+// подсветка списка после кнопки «Выбрать город» на первом экране
+.cities[data-flash] .item,
+.cities[data-flash] .search { animation: cityFlash 1.8s var(--ease) 0.45s; }
+@keyframes cityFlash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 237, 0, 0); }
+  30% { box-shadow: 0 0 0 u(3) var(--yellow); }
+}
+// подсказка под кнопками первого экрана — меняется вместе со слайдом
+.heroHint {
+  margin-top: u(-8);
+  font: 500 u(14) / u(20) var(--font-sans), system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+  animation: hintIn 0.5s var(--ease);
+}
+@keyframes hintIn { from { opacity: 0; transform: translateY(u(4)); } }
 
 .repLayer {
   position: fixed;
@@ -1268,8 +1296,10 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   display: grid;
   place-items: center;
   padding: u(24);
-  background: rgba(20, 41, 23, 0.45);
-  animation: repFade 0.25s var(--ease);
+  background: rgba(0, 30, 10, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: repFade 0.3s var(--ease);
 }
 .repBox {
   position: relative;
@@ -1277,13 +1307,21 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   max-width: 100%;
   max-height: calc(100dvh - #{u(48)});
   overflow: auto;
-  padding: u(28) u(32) u(34);
   border-radius: u(32);
-  background: #fff;
-  box-shadow: 0 u(12) u(48) rgba(20, 41, 23, 0.2);
+  background: var(--bg);
+  box-shadow: 0 u(24) u(64) rgba(0, 30, 10, 0.3);
   outline: none;
-  animation: repUp 0.35s var(--ease);
+  animation: repUp 0.45s var(--ease);
   &[data-one] { width: u(520); .repGrid { grid-template-columns: minmax(0, 1fr); } }
+}
+// шапка на фото травы под затемнением — как блок «Стать партнёром»
+.repTop {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: u(28) u(32) u(26);
+  > img { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
+  &::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(0, 0, 0, 0.5); }
 }
 .repHandle { display: none; }
 .repHead {
@@ -1291,7 +1329,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   align-items: flex-start;
   justify-content: space-between;
   gap: u(16);
-  h3 { @include display; font-size: u(30); line-height: u(37); color: var(--heading); }
+  h3 { @include display; font-size: u(30); line-height: u(37); color: var(--card); }
 }
 .repClose {
   flex: none;
@@ -1302,20 +1340,36 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   margin: u(-4) u(-8) 0 0;
   border: 0;
   border-radius: 50%;
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.16);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.3s var(--ease);
   img { width: u(20); height: u(20); }
-  @include hover { background: #e7ece4; }
-  &:focus-visible { outline: u(2) solid var(--green); outline-offset: u(2); }
+  @include hover { background: rgba(255, 255, 255, 0.28); transform: rotate(90deg); }
+  &:focus-visible { outline: u(2) solid var(--yellow); outline-offset: u(2); }
 }
 .repLead {
-  margin-top: u(9);
+  margin-top: u(6);
   font: 500 u(16) / u(22) var(--font-sans), system-ui, sans-serif;
-  color: #52604f;
+  color: rgba(255, 255, 255, 0.82);
 }
-.repName { font: 700 u(19) / u(26) var(--font-sans), system-ui, sans-serif; color: var(--heading); }
-.repSub { margin-top: u(3); font: 500 u(13) / u(18) var(--font-sans), system-ui, sans-serif; color: #52604f; }
+
+.repGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: u(16);
+  padding: u(24) u(32) u(32);
+}
+.repCard {
+  @include card(24, 16);
+  display: flex;
+  flex-direction: column;
+  gap: u(16);
+  animation: repCard 0.5s var(--ease) both;
+  animation-delay: calc(var(--d, 0) * 70ms + 150ms);
+}
+.repWho { display: flex; align-items: center; gap: u(12); min-width: 0; padding: u(2) u(4) 0; > div { min-width: 0; } }
+.repName { font: 700 u(20) / u(26) var(--font-sans), system-ui, sans-serif; color: var(--heading); }
+.repSub { margin-top: u(2); font: 500 u(14) / u(20) var(--font-sans), system-ui, sans-serif; color: var(--muted); }
 .repPhoto {
   flex: none;
   display: grid;
@@ -1324,103 +1378,61 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   height: u(54);
   border-radius: 50%;
   object-fit: cover;
-  background: #dfe8d9;
+  background: var(--soft);
   font: 700 u(20) / 1 var(--font-sans), system-ui, sans-serif;
   color: var(--heading);
 }
 
-// несколько представителей — карточки с чипами
-.repGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: u(24);
-  margin-top: u(20);
-}
-.repCard {
-  display: flex;
-  flex-direction: column;
-  gap: u(18);
-  padding: u(12);
-  border-radius: u(20);
-  background: #f4f7f1;
-}
-.repWho { display: flex; align-items: center; gap: u(12); min-width: 0; padding: u(2) u(4) 0; > div { min-width: 0; } }
-.repWho .repName, .repWho .repSub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.repChips { display: flex; flex-wrap: wrap; gap: u(8); }
+// кнопки как на сайте: MAX — зелёная с жёлтой каплей, звонок — жёлтая
+.repChips { display: flex; gap: u(8); }
 .repChip {
+  @include drop(rgba(0, 62, 21, 0.16), 60);
+  flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: u(5);
-  flex: 1 0 auto;
-  height: u(44);
-  padding: 0 u(12) 0 u(10);
-  border: u(1) solid #e0e8da;
-  border-radius: u(22);
-  background: #fff;
-  font: 700 u(13) / 1 var(--font-sans), system-ui, sans-serif;
-  color: var(--heading);
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  img { width: u(18); height: u(18); }
-  img[width="24"] { width: u(24); height: u(24); margin: 0 u(-3); }
-  @include hover { border-color: var(--heading); }
-  &:active { background: #eef3ea; }
-  &:focus-visible { outline: u(2) solid var(--green); outline-offset: u(2); }
-}
-.repVk { font: 800 u(11) / 1 var(--font-sans), system-ui, sans-serif; color: var(--heading); width: u(18); text-align: center; }
-
-// один представитель — крупная карточка и кнопки-строки
-.repBig {
-  display: flex;
-  align-items: center;
-  gap: u(20);
-  margin-top: u(29);
-  .repPhoto { width: u(88); height: u(88); font-size: u(32); }
-  .repName { font-size: u(30); line-height: u(41); }
-  .repSub { margin-top: u(1); font-size: u(16); line-height: u(22); }
-}
-.repBig + .repLead { margin-top: u(21); }
-.repRows { display: flex; flex-direction: column; gap: u(8); margin-top: u(9); }
-.repRow {
-  display: flex;
-  align-items: center;
-  gap: u(11);
-  width: 100%;
+  gap: u(6);
   height: u(48);
-  padding: 0 u(16);
-  border: u(1) solid #e0e8da;
-  border-radius: u(24);
-  background: #fff;
-  font: 700 u(16) / u(22) var(--font-sans), system-ui, sans-serif;
-  color: var(--heading);
-  text-align: left;
+  padding: 0 u(14);
+  border: 0;
+  border-radius: u(100);
+  background: var(--yellow);
+  font: 500 u(15) / 1 var(--font-btn), system-ui, sans-serif;
+  color: var(--btn-ink);
+  white-space: nowrap;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.2s var(--ease);
-  img { width: u(20); height: u(20); flex: none; }
-  img[width="24"] { width: u(24); height: u(24); margin: 0 u(-2); }
-  > span:not(.repVk) { flex: 1; }
-  @include hover { border-color: var(--heading); img:last-child { transform: translateX(u(3)); } }
-  img:last-child { transition: transform 0.25s var(--ease); }
-  &[data-main] { border-color: var(--heading); background: var(--heading); color: #fff; }
+  transition: color 0.3s, transform 0.2s var(--ease);
+  img { width: u(18); height: u(18); }
+  img[width="24"] { width: u(22); height: u(22); margin: 0 u(-2); }
+  &[data-main] {
+    @include drop(var(--yellow), 60);
+    background: var(--green);
+    color: var(--card);
+    .repVk { color: var(--card); }
+    @media (hover: hover) { &:active { color: var(--heading); } }
+  }
   &:focus-visible { outline: u(2) solid var(--green); outline-offset: u(2); }
 }
+.repVk { font: 800 u(11) / 1 var(--font-sans), system-ui, sans-serif; color: var(--heading); }
 
 @keyframes repFade { from { opacity: 0; } }
-@keyframes repUp { from { opacity: 0; transform: translateY(u(16)) scale(0.98); } }
+@keyframes repUp { from { opacity: 0; transform: translateY(u(24)) scale(0.97); } }
+@keyframes repCard { from { opacity: 0; transform: translateY(u(12)); } }
 
 // МВ: нижняя панель
 @include mobile {
+  .heroHint { margin-top: 0; text-align: center; font-size: u(13); }
   .repLayer { place-items: end stretch; padding: 0; }
   .repBox,
   .repBox[data-one] {
     width: 100%;
     max-height: 88dvh;
-    padding: u(24) u(16) calc(#{u(24)} + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
     border-radius: u(28) u(28) 0 0;
     box-shadow: none;
-    animation: repSheet 0.35s var(--ease);
+    animation: repSheet 0.4s var(--ease);
   }
+  .repTop { padding: u(26) u(16) u(18); }
   .repHandle {
     display: block;
     position: absolute;
@@ -1430,25 +1442,19 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
     height: u(4);
     margin-left: u(-20);
     border-radius: u(2);
-    background: #cdd6c8;
+    background: rgba(255, 255, 255, 0.5);
   }
-  .repHead h3 { font-size: u(20); line-height: u(26); padding-top: u(8); }
+  .repHead h3 { font-size: u(22); line-height: u(28); padding-top: u(6); }
   .repClose { margin: 0; }
   .repLead { margin-top: u(4); font-size: u(14); line-height: u(19); }
-  .repGrid { grid-template-columns: minmax(0, 1fr); gap: u(12); margin-top: u(16); }
-  .repBig {
-    gap: u(14);
-    margin-top: u(20);
-    .repPhoto { width: u(58); height: u(58); font-size: u(22); }
-    .repName { font-size: u(22); line-height: u(29); }
-    .repSub { font-size: u(14); line-height: u(19); }
-  }
-  .repBig + .repLead { margin-top: u(16); }
-  .repRow { font-size: u(15); }
+  .repGrid { grid-template-columns: minmax(0, 1fr); gap: u(12); padding: u(16) u(16) u(24); }
+  .repName { font-size: u(18); line-height: u(24); }
+  .repChip { height: u(46); }
 }
 @keyframes repSheet { from { transform: translateY(100%); } }
 @media (prefers-reduced-motion: reduce) {
-  .repLayer, .repBox, .repBox[data-one] { animation: none; }
+  .repLayer, .repBox, .repBox[data-one], .repCard, .heroHint { animation: none; }
+  .cities[data-flash] .item, .cities[data-flash] .search { animation: none; }
 }
 
 // ---------- Вариант BODAI (/bodai): палитра и логотип из гайдлайна BODAI ----------
