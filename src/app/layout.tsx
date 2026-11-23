@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Manrope, Montserrat, Montserrat_Alternates } from "next/font/google";
+import { Inter, Manrope, Montserrat_Alternates } from "next/font/google";
 import { site } from "@/content";
 import "@/styles/globals.scss";
 
@@ -14,12 +14,6 @@ const sans = Manrope({
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600", "700", "800"],
 });
-// тест /bodai-caps: заголовки заглавными обычным Montserrat, как на слайдах гайдлайна BODAI
-const caps = Montserrat({
-  variable: "--font-caps",
-  subsets: ["latin", "cyrillic"],
-  weight: ["700"],
-});
 const btn = Inter({
   variable: "--font-btn",
   subsets: ["latin", "cyrillic"],
@@ -33,7 +27,7 @@ export const metadata: Metadata = {
   robots: process.env.PAGES_EXPORT === "1" ? { index: false, follow: false } : undefined,
   title: site.title,
   description: site.description,
-  icons: { icon: `${base}/img/logo.png` },
+  icons: { icon: `${base}/img/bodai/mark.png` },
   openGraph: { title: site.title, description: site.description, type: "website", locale: "ru_RU" },
 };
 
@@ -43,7 +37,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ru" className={`${display.variable} ${sans.variable} ${btn.variable} ${caps.variable}`}>
+    <html lang="ru" className={`${display.variable} ${sans.variable} ${btn.variable}`}>
       <body>{children}</body>
     </html>
   );
