@@ -759,10 +759,8 @@ function Cities() {
     // фокус в то поле, которое сейчас видно (ДВ или МВ)
     (inputD.current?.offsetParent ? inputD.current : input.current)?.focus();
   };
-  // ДВ: найденные города (или все) раскладываются в три колонки
+  // ДВ: найденные города (или все) — сетка в три колонки, заполняется по строкам
   const listD = found ?? shownCities;
-  const per = Math.max(1, Math.ceil(listD.length / 3));
-  const cols = [0, 1, 2].map((c) => listD.slice(c * per, c * per + per));
   const searchProps = { q, setQ, setFocus, focus, typed };
 
   return (
@@ -775,22 +773,18 @@ function Cities() {
         <CitySearch {...searchProps} inputRef={inputD} className={s.search} count={found?.length} />
       </div>
 
-      {/* ДВ: колонки всегда в DOM (с постоянными ключами) — при пересоздании data-reveal
-          снова прятал бы их, и после очистки поиска города пропадали */}
+      {/* ДВ: сетка всегда в DOM — при пересоздании data-reveal снова прятал бы её,
+          и после очистки поиска города пропадали */}
       {found && !found.length && (
         <div className={s.cityEmptyD}>
           <CityEmpty onReset={reset} />
         </div>
       )}
-      <div className={s.cityCols} data-search={found ? "" : undefined} style={found && !found.length ? { display: "none" } : undefined}>
-        {cols.map((col, c) => (
-          <ul key={c} data-reveal="" style={d(c)}>
-            {col.map((c2) => (
-              <CityItem key={c2.name} city={c2} onOpen={setOpen} />
-            ))}
-          </ul>
+      <ul className={s.cityCols} data-reveal="" data-search={found ? "" : undefined} style={found && !found.length ? { display: "none" } : undefined}>
+        {listD.map((c2) => (
+          <CityItem key={c2.name} city={c2} onOpen={setOpen} />
         ))}
-      </div>
+      </ul>
 
       {/* МВ */}
       <div className={s.cityM}>
@@ -951,13 +945,58 @@ function useReveal() {
   }, []);
 }
 
+// тестовый фон: два слоя узора (дальний мельче и медленнее), сдвигаются от скролла и за мышью.
+// Двигаем transform по кадрам (rAF), прогресс в ref — React не перерисовывается.
+function BgLayers({ bg }: { bg: "dew" | "wheat" }) {
+  const far = useRef<HTMLDivElement>(null);
+  const near = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const m = { x: 0, y: 0, tx: 0, ty: 0 };
+    const onMove = (e: PointerEvent) => {
+      m.tx = e.clientX / innerWidth - 0.5;
+      m.ty = e.clientY / innerHeight - 0.5;
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    let raf = 0;
+    const tile = (el: HTMLDivElement | null) => (el ? parseFloat(getComputedStyle(el).backgroundSize) || 600 : 600);
+    const tick = () => {
+      m.x += (m.tx - m.x) * 0.06; // мягко догоняем курсор
+      m.y += (m.ty - m.y) * 0.06;
+      const sy = scrollY;
+      for (const [el, k, amp] of [
+        [far.current, 0.12, 10],
+        [near.current, 0.3, 24],
+      ] as const) {
+        if (!el) continue;
+        const t = tile(el);
+        // скролл по модулю плитки — узор бесконечный, слой не уезжает
+        const y = -((sy * k) % t) - m.y * amp;
+        el.style.transform = `translate3d(${(-m.x * amp).toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("pointermove", onMove);
+    };
+  }, []);
+  return (
+    <>
+      <div ref={far} className={s.bgLayer} data-bg={bg} data-depth="far" aria-hidden="true" />
+      <div ref={near} className={s.bgLayer} data-bg={bg} data-depth="near" aria-hidden="true" />
+    </>
+  );
+}
+
 // bg — тестовый фон страницы (капли росы / колоски), только на тестовых страницах /test-dew и /test-wheat
 export default function Landing({ brand = "", bg }: { brand?: "" | "bodai"; bg?: "dew" | "wheat" }) {
   useReveal();
   return (
     <Brand.Provider value={brand}>
     <div className={brand === "bodai" ? s.bodai : undefined} style={brand ? undefined : { display: "contents" }}>
-      {bg && <div className={s.bgLayer} data-bg={bg} aria-hidden="true" />}
+      {bg && <BgLayers bg={bg} />}
       <Header />
       <main>
         <Hero />

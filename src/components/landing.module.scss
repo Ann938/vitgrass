@@ -507,11 +507,11 @@
   gap: u(8);
   p { font-weight: 500; font-size: u(18); color: var(--heading); }
 }
+// ДВ: три колонки, города идут по строкам — последняя строка неполная, но без «дыры» в колонке
 .cityCols {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: u(22);
-  ul { display: flex; flex-direction: column; gap: u(16); }
+  gap: u(16) u(22);
 }
 // пункт списка: жёлтая капля выглядывает слева при наведении
 .item {
@@ -1591,12 +1591,18 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 // слой под всем содержимым: виден только на сером фоне между карточками
 .bgLayer {
   position: fixed;
-  inset: 0;
+  // запас по краям: слой сдвигается за мышью и при скролле — края не должны оголяться
+  inset: -15vh -60px -100vh;
   z-index: -1;
   pointer-events: none;
   background-repeat: repeat;
+  will-change: transform;
   &[data-bg="dew"] { background-image: url("../../public/img/bg/dew.svg"); background-size: u(560) u(560); }
   &[data-bg="wheat"] { background-image: url("../../public/img/bg/wheat.svg"); background-size: u(640) u(640); }
+  // дальний слой: мельче, сдвинут по фазе и бледнее — даёт глубину
+  &[data-depth="far"] { opacity: 0.55; background-position: u(170) u(230); }
+  &[data-depth="far"][data-bg="dew"] { background-size: u(340) u(340); }
+  &[data-depth="far"][data-bg="wheat"] { background-size: u(420) u(420); }
 }
 
 // ---------- Вариант BODAI (/bodai): палитра и логотип из гайдлайна BODAI ----------
