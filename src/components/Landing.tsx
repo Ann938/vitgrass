@@ -619,9 +619,10 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
             </div>
           )}
           {city.reps.map((r, k) => (
-            <div key={k} className={s.repCard} style={d(k)}>
+            <div key={k} className={s.repCard} data-photo={r.photo ? "" : undefined} style={d(k)}>
               <div className={s.repWho}>
-                {/* фото пока нет — круг убран; появятся фото: <Avatar r={r} /> */}
+                {/* фото есть не у всех: без фото круг не показываем */}
+                {r.photo && <img className={s.repPhoto} src={src(r.photo)} alt="" loading="lazy" />}
                 <div>
                   <p className={s.repName}>{repTitle(r)}</p>
                   <p className={s.repSub}>{repSub(r)}</p>

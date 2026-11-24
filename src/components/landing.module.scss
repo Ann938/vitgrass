@@ -1368,7 +1368,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
 }
 .repBox {
   position: relative;
-  width: u(776);
+  width: u(880);
   max-width: 100%;
   max-height: calc(100dvh - #{u(48)});
   overflow: auto;
@@ -1424,15 +1424,17 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   gap: u(16);
   padding: u(24) u(32) u(32);
 }
-// ДВ: имя слева, кнопка справа в одну строку; МВ — кнопка под именем
+// ДВ: фото + имя и телефон слева, «Позвонить» справа в одну строку (окно шире — u(880), чтобы
+// с фото в две колонки кнопка помещалась). МВ — кнопка на всю ширину под именем.
 .repCard {
   @include card(24, 16);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: u(16);
+  gap: u(12);
   .repWho { flex: 1; }
   .repChips { flex: none; }
+  .repChip { padding-inline: u(18); }
   animation: repCard 0.5s var(--ease) both;
   animation-delay: calc(var(--d, 0) * 70ms + 150ms);
 }
@@ -1443,8 +1445,8 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   flex: none;
   display: grid;
   place-items: center;
-  width: u(54);
-  height: u(54);
+  width: u(56);
+  height: u(56);
   border-radius: 50%;
   object-fit: cover;
   background: var(--soft);
@@ -1540,6 +1542,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .repLead { margin-top: u(4); font-size: u(14); line-height: u(19); }
   .repGrid { grid-template-columns: minmax(0, 1fr); gap: u(12); padding: u(16) u(16) u(24); }
   .repCard { flex-direction: column; align-items: stretch; .repChips { flex: auto; } }
+  .repPhoto { width: u(56); height: u(56); }
   .repName { font-size: u(18); line-height: u(24); }
   .repChip { height: u(46); }
 }
