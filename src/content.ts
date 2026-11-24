@@ -20,13 +20,14 @@ export const site = {
 };
 
 // порядок пунктов — как блоки идут на странице (23.11)
-export const nav: { label: string; href: string; external?: boolean; mobile?: boolean }[] = [
+export const nav: { label: string; href: string; external?: boolean; mobile?: boolean; desktop?: boolean }[] = [
   { label: "Продукция", href: "#products" },
   { label: "Представители", href: "#cities" },
   { label: "Отзывы", href: "#reviews" },
   { label: "Вопросы", href: "#faq" },
-  // 24.11: вместо «Контакты» — номер Алины (звонок в одно касание), «Стать партнером» из шапки убран
-  { label: links.phoneText, href: links.phone },
+  // 24.11: на ДВ — номер Алины с иконкой (звонок в одно касание), в мобильном меню — «Контакты»; «Стать партнером» убран
+  { label: links.phoneText, href: links.phone, desktop: true },
+  { label: "Контакты", href: "#contacts", mobile: true },
 ];
 
 // Слайды первого экрана: ролик (для ДВ 1920×1080, для МВ — вертикальный центр кадра 720×1200) и постер с первого кадра.
