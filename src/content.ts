@@ -35,7 +35,7 @@ export const nav: { label: string; href: string; external?: boolean; mobile?: bo
 export const slides = [
   {
     title: "Витграсс — забота о своём здоровье",
-    titleMobile: "Витграсс это забота о своём здоровье",
+    titleMobile: "Витграсс — забота о своём здоровье",
     lead: "Замороженный сок из ростков пшеницы —|привезёт представитель в вашем городе",
     poster: "/img/hero-1.webp",
     posterMobile: "/img/hero-1-m.webp",
