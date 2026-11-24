@@ -261,7 +261,7 @@ export const faq = {
   title: "Часто задаваемые вопросы",
   // строка связи под ответом с contact: true — только звонок Алине (Instagram и WhatsApp убраны 24.11)
   contactText: "Остались вопросы? Алина ответит",
-  contactCall: "Позвонить Алине",
+  contactCall: "Позвонить",
   items: [
     {
       q: "Как правильно хранить сок?",

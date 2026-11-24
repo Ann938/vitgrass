@@ -630,7 +630,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
               {(r.phone || r.vk) && (
                 <div className={s.repChips}>
                   {r.phone && (
-                    <a href={tel(r.phone)} className={s.repChip} data-main="">
+                    <a href={tel(r.phone)} className={s.repChip}>
                       <img src={callIcon} alt="" width={24} height={24} />
                       Позвонить
                     </a>
