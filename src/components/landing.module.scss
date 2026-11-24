@@ -673,7 +673,7 @@
   font-size: u(16);
   line-height: u(26);
   color: var(--body);
-  > p, > ul { max-width: u(780); }
+  > p, > ul { max-width: u(1120); }
   b { color: var(--heading); font-weight: 700; }
   ul { display: flex; flex-direction: column; gap: u(10); }
   li {
@@ -691,6 +691,8 @@
     }
   }
   p[data-note] {
+    align-self: stretch;
+    max-width: none;
     padding: u(14) u(18);
     border-radius: u(16);
     background: var(--soft);
@@ -705,7 +707,6 @@
   align-items: center;
   justify-content: space-between;
   gap: u(16);
-  max-width: u(780);
   margin-top: u(4);
   padding: u(12) u(12) u(12) u(20);
   border-radius: u(20);
@@ -1423,11 +1424,15 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   gap: u(16);
   padding: u(24) u(32) u(32);
 }
+// ДВ: имя слева, кнопка справа в одну строку; МВ — кнопка под именем
 .repCard {
   @include card(24, 16);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: u(16);
+  .repWho { flex: 1; }
+  .repChips { flex: none; }
   animation: repCard 0.5s var(--ease) both;
   animation-delay: calc(var(--d, 0) * 70ms + 150ms);
 }
@@ -1534,6 +1539,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .repClose { margin: 0; }
   .repLead { margin-top: u(4); font-size: u(14); line-height: u(19); }
   .repGrid { grid-template-columns: minmax(0, 1fr); gap: u(12); padding: u(16) u(16) u(24); }
+  .repCard { flex-direction: column; align-items: stretch; .repChips { flex: auto; } }
   .repName { font-size: u(18); line-height: u(24); }
   .repChip { height: u(46); }
 }

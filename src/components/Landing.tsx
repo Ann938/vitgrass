@@ -632,7 +632,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                   {r.phone && (
                     <a href={tel(r.phone)} className={s.repChip} data-main="">
                       <img src={callIcon} alt="" width={24} height={24} />
-                      Звонок
+                      Позвонить
                     </a>
                   )}
                   {r.vk && (
