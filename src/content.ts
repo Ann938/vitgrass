@@ -25,8 +25,8 @@ export const nav: { label: string; href: string; external?: boolean; mobile?: bo
   { label: "Представители", href: "#cities" },
   { label: "Отзывы", href: "#reviews" },
   { label: "Вопросы", href: "#faq" },
-  { label: "Контакты", href: "#contacts" },
-  { label: "Стать партнером", href: links.partner, external: true },
+  // 24.11: вместо «Контакты» — номер Алины (звонок в одно касание), «Стать партнером» из шапки убран
+  { label: links.phoneText, href: links.phone },
 ];
 
 // Слайды первого экрана: ролик (для ДВ 1920×1080, для МВ — вертикальный центр кадра 720×1200) и постер с первого кадра.
