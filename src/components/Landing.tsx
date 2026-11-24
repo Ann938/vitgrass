@@ -18,7 +18,7 @@ import {
   type Rep,
 } from "@/content";
 import s from "./landing.module.scss";
-import { callIcon, closeWhiteIcon, maxIcon } from "./repIcons";
+import { callIcon, closeWhiteIcon } from "./repIcons";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const src = (p: string) => (p.startsWith("/") ? base + p : p);
@@ -58,7 +58,8 @@ function Rich({ lines }: { lines: string[] }) {
     if (l.startsWith("- ")) list.push(l.slice(2));
     else {
       flush();
-      out.push(<p key={out.length}>{bold(l)}</p>);
+      // «**Внимание!** …» — отдельной плашкой, чтобы не терялось в тексте
+      out.push(<p key={out.length} data-note={l.startsWith("**Внимание!**") || undefined}>{bold(l)}</p>);
     }
   }
   flush();
@@ -536,7 +537,7 @@ function CityItem({ city, onOpen }: { city: City; onOpen: (c: City) => void }) {
 }
 
 // ---------- попап «Представители в …» (макет 544:667) ----------
-// Связь — MAX и звонок (Instagram убран 23.11). Под именем — телефон.
+// Связь — только звонок (Instagram убран 23.11, MAX убран 24.11; иконка maxIcon и useCopied остались в коде). Под именем — телефон.
 // Один представитель — «Заказать в …», несколько — «Представители в …»; карточки одинаковые,
 // мессенджеры в ряд (ДВ — две колонки, у одного — одна). На МВ — нижняя панель.
 // Ссылки на чат MAX по номеру телефона нет — кнопка MAX копирует номер, его вставляют в поиск MAX.
@@ -573,7 +574,6 @@ function useCopied() {
 
 function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null);
-  const { copied, copy } = useCopied();
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
     const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -624,7 +624,7 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                 {/* фото пока нет — круг убран; появятся фото: <Avatar r={r} /> */}
                 <div>
                   <p className={s.repName}>{repTitle(r)}</p>
-                  <p className={s.repSub}>{copied && copied === r.phone ? "Номер скопирован — найдите в MAX" : repSub(r)}</p>
+                  <p className={s.repSub}>{repSub(r)}</p>
                 </div>
               </div>
               {(r.phone || r.vk) && (
@@ -634,12 +634,6 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                       <img src={callIcon} alt="" width={24} height={24} />
                       Звонок
                     </a>
-                  )}
-                  {r.phone && (
-                    <button type="button" className={s.repChip} onClick={() => copy(r.phone!)}>
-                      <img src={maxIcon} alt="" width={18} height={18} />
-                      MAX
-                    </button>
                   )}
                   {r.vk && (
                     <A href={r.vk} className={s.repChip}>
@@ -898,6 +892,15 @@ function Faq() {
               <div>
                 <div className={s.accText}>
                   <Rich lines={f.a} />
+                  {f.contact && (
+                    <div className={s.accContact}>
+                      <span>{faq.contactText}</span>
+                      <a href={links.phone} className={`${s.repChip} ${s.accCall}`}>
+                        <img src={callIcon} alt="" width={20} height={20} />
+                        {faq.contactCall}
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -926,7 +929,7 @@ function Contacts() {
           <a href={links.phone} className={s.btnPrimary}>
             {contacts.call}
           </a>
-          <A href={links.whatsapp} className={s.btnSecondary} data-label={contacts.write}>
+          <A href={links.whatsapp} className={s.btnOutlineGreen} data-label={contacts.write}>
             {contacts.write}
           </A>
         </div>
@@ -969,7 +972,7 @@ function useReveal() {
 
 // тестовый фон: два слоя узора (дальний мельче и медленнее), сдвигаются от скролла и за мышью.
 // Двигаем transform по кадрам (rAF), прогресс в ref — React не перерисовывается.
-function BgLayers({ bg }: { bg: "dew" | "wheat" }) {
+function BgLayers({ bg }: { bg: "dew" | "wheat" | "field" }) {
   const far = useRef<HTMLDivElement>(null);
   const near = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -1013,7 +1016,7 @@ function BgLayers({ bg }: { bg: "dew" | "wheat" }) {
 }
 
 // bg — тестовый фон страницы (капли росы / колоски), только на тестовых страницах /test-dew и /test-wheat
-export default function Landing({ brand = "", bg }: { brand?: "" | "bodai"; bg?: "dew" | "wheat" }) {
+export default function Landing({ brand = "", bg }: { brand?: "" | "bodai"; bg?: "dew" | "wheat" | "field" }) {
   useReveal();
   return (
     <Brand.Provider value={brand}>

@@ -13,6 +13,31 @@
 .btnOutline {
   @include btn-outline;
 }
+// зелёный контур на белом (блок «Мы на связи»): капля и заливка зелёные, буквы под ней белеют
+.btnOutlineGreen {
+  @include btn-base;
+  @include drop(var(--green));
+  box-shadow: inset 0 0 0 u(1.5) var(--green);
+  color: var(--green);
+  @media (hover: hover) {
+    &:active { color: var(--card); }
+    &[data-label]::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-inline: inherit;
+      color: var(--card);
+      pointer-events: none;
+      clip-path: inset(0 100% 0 0 round u(100));
+      transition: clip-path 0.45s var(--ease);
+    }
+    &[data-label]:hover::after { clip-path: inset(0 calc(100% - #{u(69)}) 0 0 round u(100)); }
+    &[data-label]:active::after { clip-path: inset(0 0 0 0 round u(100)); }
+  }
+}
 .onlyM {
   display: none;
 }
@@ -635,20 +660,60 @@
   > div { overflow: hidden; }
   .acc[data-open] & { grid-template-rows: 1fr; }
 }
+// ответ: тонкая линия отделяет от вопроса, строки не шире u(780),
+// списки — зелёные точки, «Внимание!» — мягкая плашка, связь с Алиной — строка с кнопкой
 .accText {
   display: flex;
   flex-direction: column;
-  gap: u(10);
-  padding: 0 u(24) u(24);
-  max-width: u(900);
+  align-items: flex-start;
+  gap: u(12);
+  margin-inline: u(24);
+  padding: u(20) 0 u(24);
+  border-top: u(1) solid var(--soft);
   font-size: u(16);
   line-height: u(26);
   color: var(--body);
+  > p, > ul { max-width: u(780); }
   b { color: var(--heading); font-weight: 700; }
-  ul { display: flex; flex-direction: column; gap: u(6); padding-left: u(20); list-style: disc; }
-  li::marker { color: var(--green); }
+  ul { display: flex; flex-direction: column; gap: u(10); }
+  li {
+    position: relative;
+    padding-left: u(22);
+    &::before {
+      content: "";
+      position: absolute;
+      left: u(4);
+      top: u(10);
+      width: u(7);
+      height: u(7);
+      border-radius: 50%;
+      background: var(--green-light);
+    }
+  }
+  p[data-note] {
+    padding: u(14) u(18);
+    border-radius: u(16);
+    background: var(--soft);
+    color: var(--heading);
+    b { color: var(--green); }
+  }
   .accLink { color: var(--green); font-weight: 600; text-decoration: underline; text-underline-offset: u(3); }
 }
+.accContact {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: u(16);
+  max-width: u(780);
+  margin-top: u(4);
+  padding: u(12) u(12) u(12) u(20);
+  border-radius: u(20);
+  background: var(--bg);
+  span { @include type-item; font-size: u(16); }
+}
+// .repChip объявлен ниже в файле — поднимаем вес селектора, чтобы кнопка не растягивалась
+.accContact .accCall { flex: none; height: u(48); padding-inline: u(22); }
 
 // ---------- 09 · контакты ----------
 .contacts {
@@ -1197,10 +1262,23 @@
     gap: u(16);
   }
   .accText {
-    padding: 0 u(16) u(16);
+    margin-inline: u(16);
+    padding: u(16) 0 u(16);
+    gap: u(10);
     font-size: u(15);
     line-height: u(24);
+    li::before { top: u(9); }
+    p[data-note] { padding: u(12) u(14); border-radius: u(14); }
   }
+  .accContact {
+    flex-direction: column;
+    align-items: stretch;
+    gap: u(12);
+    padding: u(14);
+    border-radius: u(16);
+    span { text-align: center; }
+  }
+  .accContact .accCall { height: u(46); }
 
   .contacts {
     display: block;
@@ -1599,6 +1677,9 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   will-change: transform;
   &[data-bg="dew"] { background-image: url("../../public/img/bg/dew.svg"); background-size: u(760) u(760); }
   &[data-bg="wheat"] { background-image: url("../../public/img/bg/wheat.svg"); background-size: u(900) u(900); }
+  // сплошное поле: плотные колоски по всей странице
+  &[data-bg="field"] { background-image: url("../../public/img/bg/wheat-full.svg"); background-size: u(720) u(720); }
+  &[data-depth="far"][data-bg="field"] { background-size: u(480) u(480); }
   // дальний слой: мельче, сдвинут по фазе и бледнее — даёт глубину
   &[data-depth="far"] { opacity: 0.35; background-position: u(330) u(410); }
   &[data-depth="far"][data-bg="dew"] { background-size: u(520) u(520); }
