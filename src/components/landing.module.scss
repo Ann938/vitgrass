@@ -1435,6 +1435,8 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .repWho { flex: 1; }
   .repChips { flex: none; }
   .repChip { padding-inline: u(18); }
+  // две кнопки (магазин: «Маршрут» + ВКонтакте) в ряд с именем не помещаются — строкой под ним
+  &[data-two] { flex-wrap: wrap; .repWho { flex-basis: 100%; } .repChips { flex: auto; } }
   animation: repCard 0.5s var(--ease) both;
   animation-delay: calc(var(--d, 0) * 70ms + 150ms);
 }
