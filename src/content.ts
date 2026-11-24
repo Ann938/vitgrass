@@ -236,7 +236,7 @@ export const cities = {
     { name: "Сарманово", loc: "Сарманово", reps: [{ name: "Дания", ig: "vitgrass_sarmanovo", phone: "79172519101" }] },
     { name: "Танайка", loc: "Танайке", reps: [{ name: "Юлия", ig: "juliasavina_vitgrass", phone: "79172351453" }] },
     { name: "Туймазы", loc: "Туймазах", reps: [{ name: "Регина", ig: "vitgrass_tmz", phone: "79874765333" }] },
-    { name: "Ульяновск", loc: "Ульяновске", reps: [{ name: "Евгения", ig: "vitgrass_ulyanovsk", phone: "79279855433", photo: "/img/rep/evgenia-uln.webp" }, { name: "Алина · магазин «БиоМир»", note: "ул. Октябрьская, 48", map: "Ульяновск, улица Октябрьская, 48, БиоМир", vk: "https://vk.ru/biomir_ul" }] },
+    { name: "Ульяновск", loc: "Ульяновске", reps: [{ name: "Евгения", ig: "vitgrass_ulyanovsk", phone: "79279855433", photo: "/img/rep/evgenia-uln.webp" }, { name: "Алина · магазин «БиоМир»", note: "ул. Октябрьская, 48", vk: "https://vk.ru/biomir_ul" }] },
     { name: "Уруссу", loc: "Уруссу", reps: [{ name: "Алсу", ig: "vitgrass_zainsk", phone: "79656118266", photo: "/img/rep/alsu-zainsk.webp" }] },
     { name: "Уфа", loc: "Уфе", reps: [{ name: "Гульназ", ig: "ufa_vitgrass", phone: "79825060051" }, { name: "Снежанна", phone: "79273000864" }] },
     { name: "Чебоксары", loc: "Чебоксарах", reps: [{ name: "Наталья", ig: "nataliavasileva_83", phone: "79278632610" }] },

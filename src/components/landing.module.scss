@@ -1544,6 +1544,7 @@ button.item { width: 100%; border: 0; font: inherit; text-align: left; cursor: p
   .repLead { margin-top: u(4); font-size: u(14); line-height: u(19); }
   .repGrid { grid-template-columns: minmax(0, 1fr); gap: u(12); padding: u(16) u(16) u(24); }
   .repCard { flex-direction: column; align-items: stretch; .repChips { flex: auto; } }
+  .repCard[data-two] .repWho { flex-basis: auto; }
   .repPhoto { width: u(56); height: u(56); }
   .repName { font-size: u(18); line-height: u(24); }
   .repChip { height: u(46); }
