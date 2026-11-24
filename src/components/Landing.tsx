@@ -18,7 +18,7 @@ import {
   type Rep,
 } from "@/content";
 import s from "./landing.module.scss";
-import { callIcon, closeWhiteIcon } from "./repIcons";
+import { callIcon, closeWhiteIcon, routeIcon } from "./repIcons";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const src = (p: string) => (p.startsWith("/") ? base + p : p);
@@ -628,13 +628,19 @@ function RepDialog({ city, onClose }: { city: City; onClose: () => void }) {
                   <p className={s.repSub}>{repSub(r)}</p>
                 </div>
               </div>
-              {(r.phone || r.vk) && (
+              {(r.phone || r.vk || r.map) && (
                 <div className={s.repChips}>
                   {r.phone && (
                     <a href={tel(r.phone)} className={s.repChip}>
                       <img src={callIcon} alt="" width={24} height={24} />
                       Позвонить
                     </a>
+                  )}
+                  {r.map && (
+                    <A href={`https://yandex.ru/maps/?text=${encodeURIComponent(r.map)}`} className={s.repChip}>
+                      <img src={routeIcon} alt="" width={24} height={24} />
+                      Маршрут
+                    </A>
                   )}
                   {r.vk && (
                     <A href={r.vk} className={s.repChip}>

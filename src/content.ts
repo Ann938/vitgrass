@@ -202,7 +202,8 @@ export const advantages = {
 // Представители по городам (список от Ани, 23.11.2026). Клик по городу — попап с контактами (макет 544:667).
 // phone — для звонка и MAX (тот же номер); ig — ник в Instagram; vk — ссылка ВКонтакте; note — адрес магазина.
 // loc — город в предложном падеже для заголовка «Заказать в …».
-export type Rep = { name?: string; ig?: string; phone?: string; note?: string; vk?: string; photo?: string };
+// map — адрес для кнопки «Маршрут» (открывает Яндекс Карты), у магазинов
+export type Rep = { name?: string; ig?: string; phone?: string; note?: string; vk?: string; photo?: string; map?: string };
 export type City = { name: string; loc: string; reps: Rep[] };
 
 export const cities = {
@@ -212,7 +213,7 @@ export const cities = {
   items: [
     { name: "Азнакаево", loc: "Азнакаево", reps: [{ name: "Алсу", ig: "vitgrass_zainsk", phone: "79656118266", photo: "/img/rep/alsu-zainsk.webp" }] },
     { name: "Алексеевск", loc: "Алексеевске", reps: [{ name: "Алсу", phone: "79377721789" }] },
-    { name: "Альметьевск", loc: "Альметьевске", reps: [{ name: "Магазин «Биомаркет»", note: "ул. Радищева, 18" }, { ig: "xfit_almet" }] },
+    { name: "Альметьевск", loc: "Альметьевске", reps: [{ name: "Магазин «Биомаркет»", note: "ул. Радищева, 18", map: "Альметьевск, улица Радищева, 18" }, { ig: "xfit_almet" }] },
     { name: "Бавлы", loc: "Бавлах", reps: [{ name: "Алина", phone: "79375826866", photo: "/img/rep/alina-bavly.webp" }] },
     { name: "Балаково", loc: "Балаково", reps: [{ name: "Алена", phone: "79267932606" }] },
     { name: "Белебей", loc: "Белебее", reps: [{ name: "Регина", ig: "vitgrass_tmz", phone: "79874765333" }] },
